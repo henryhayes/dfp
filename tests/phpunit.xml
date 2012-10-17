@@ -1,0 +1,12 @@
+<phpunit bootstrap="Bootstrap.php" colors="true" stopOnFailure="false" syntaxCheck="true" strict="true">
+
+    <testsuite name="PHP Datafeed Library">
+        <directory suffix="Test.php">./</directory>
+    </testsuite>
+
+    <filter>
+        <blacklist>
+            <directory>/usr/share/php</directory>
+        </blacklist>
+    </filter>
+</phpunit>
