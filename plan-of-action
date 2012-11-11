@@ -1,6 +1,9 @@
 Reader changes
 
 Remove iterator from format abstract. Instead rely on the facade to provide iteration. (Much cleaner)
+Done:
+- Add new tests for itterator in reader.
+
 Instead the format will simply load the next record/reset feed to begining on demand.
 
 This means that the facade can take a bigger role in the processing of the feed and makes formats easier

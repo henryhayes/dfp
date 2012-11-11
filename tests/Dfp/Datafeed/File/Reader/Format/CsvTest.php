@@ -94,7 +94,9 @@ class Dfp_Datafeed_File_Reader_Format_CsvTest extends PHPUnit_Framework_TestCase
         $sut->setDialect($mockDialect);
 
         $i = 0;
-        foreach ($sut AS $position => $record) {
+        $reader = new Dfp_Datafeed_File_Reader();
+        $reader->setFormat($sut);
+        foreach ($reader AS $position => $record) {
             $this->assertEquals(++$i, $position);
             $this->assertEquals(array('a','b','c'), $record);
         }

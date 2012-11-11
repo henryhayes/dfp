@@ -250,59 +250,24 @@ class Dfp_Datafeed_File_ReaderTest extends PHPUnit_Framework_TestCase
         $this->fail('Exception not thrown');
     }
     
-    public function testCurrent()
+    public function testItterator()
     {
-        $sut = new Dfp_Datafeed_File_Reader();
-        $mockFormat = $this->getMock('Dfp_Datafeed_File_Reader_Format_Interface');
-        $mockFormat->expects($this->once())->method('current')->will($this->returnValue('current'));
-
-        $sut->setFormat($mockFormat);
-
-        $this->assertEquals('current', $sut->current());
-    }
-
-    public function testKey()
-    {
-        $sut = new Dfp_Datafeed_File_Reader();
-        $mockFormat = $this->getMock('Dfp_Datafeed_File_Reader_Format_Interface');
-        $mockFormat->expects($this->once())->method('key')->will($this->returnValue('key'));
-
-        $sut->setFormat($mockFormat);
-
-        $this->assertEquals('key', $sut->key());
-    }
-
-    public function testNext()
-    {
-        $sut = new Dfp_Datafeed_File_Reader();
-        $mockFormat = $this->getMock('Dfp_Datafeed_File_Reader_Format_Interface');
-        $mockFormat->expects($this->once())->method('next');
-
-        $sut->setFormat($mockFormat);
-
-        $sut->next();
-    }
-
-    public function testRewind()
-    {
-        $sut = new Dfp_Datafeed_File_Reader();
-        $mockFormat = $this->getMock('Dfp_Datafeed_File_Reader_Format_Interface');
-        $mockFormat->expects($this->once())->method('rewind');
-
-        $sut->setFormat($mockFormat);
-
-        $sut->rewind();
-    }
-
-    public function testValid()
-    {
-        $sut = new Dfp_Datafeed_File_Reader();
-        $mockFormat = $this->getMock('Dfp_Datafeed_File_Reader_Format_Interface');
-        $mockFormat->expects($this->once())->method('valid')->will($this->returnValue(true));
-
-        $sut->setFormat($mockFormat);
-
-        $this->assertEquals(true, $sut->valid());
+		$sut = new Dfp_Datafeed_File_Reader();
+		$mockFormat = $this->getMock('Dfp_Datafeed_File_Reader_Format_Interface');
+		$sut->setFormat($mockFormat);
+		$mockFormat->expects($this->atLeastOnce())->method('loadNextRecord')
+                 ->will(
+                     $this->onConsecutiveCalls(
+                         array('a', 'b', 'c'),
+                         array('a', 'b', 'c'),
+                         false
+                     )
+                 );
+		$mockFormat->expects($this->once())->method('resetFeed');
+		foreach ($sut AS $i => $row) {
+			$this->assertEquals(array('a', 'b', 'c'), $row);
+		}
+		
     }
 
     public function testAddError()

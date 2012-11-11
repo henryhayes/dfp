@@ -68,7 +68,11 @@ class Dfp_Datafeed_File_Reader_Format_AsciiTest extends PHPUnit_Framework_TestCa
         $sut->setDialect($dialect);
 
         $data = array();
-        foreach ($sut as $record) {
+        
+        $reader = new Dfp_Datafeed_File_Reader();
+        $reader->setFormat($sut);
+        
+        foreach ($reader as $record) {
             $data[] = $record;
         }
 
