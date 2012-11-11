@@ -16,9 +16,8 @@ class Dfp_Datafeed_ArchiveTest extends PHPUnit_Framework_TestCase
         try {
             $sut->getAdapter();
         } catch (Dfp_Datafeed_Archive_Exception $e) {
-            if ($e->getMessage() == 'Invalid Adapter Specified') {
-                return;
-            }
+        	$this->assertEquals($e->getMessage(), 'Invalid Adapter Specified');
+        	return;
         }
 
         $this->fail('Exception not thrown');
