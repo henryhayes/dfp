@@ -63,9 +63,8 @@ class Dfp_Datafeed_TransferTest extends PHPUnit_Framework_TestCase
         try {
             $sut->getAdapter();
         } catch (Dfp_Datafeed_Transfer_Exception $e) {
-            if ($e->getMessage() == 'Invalid Adapter Specified') {
-                return;
-            }
+        	$this->assertEquals($e->getMessage(), 'Invalid Adapter Specified');
+        	return;
         }
 
         $this->fail('Exception not thrown');

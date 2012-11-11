@@ -160,7 +160,8 @@ class Dfp_Datafeed_Transfer_Adapter_StreamTest extends PHPUnit_Framework_TestCas
         try {
             $uri = $sut->getUri();
         } catch (Dfp_Datafeed_Transfer_Exception $e){
-            if (!is_null($expectedException) && $e->getMessage() == $expectedException) {
+            if (!is_null($expectedException)) {
+                $this->assertEquals($e->getMessage(),$expectedException);
                 return;
             }
         }
