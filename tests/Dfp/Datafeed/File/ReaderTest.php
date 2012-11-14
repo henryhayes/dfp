@@ -415,4 +415,9 @@ class Dfp_Datafeed_File_ReaderTest extends PHPUnit_Framework_TestCase
     {
     	$this->markTestIncomplete();
     }
+    
+    public function testNextWithFilter()
+    {
+    	$this->markTestIncomplete();
+    }
 }

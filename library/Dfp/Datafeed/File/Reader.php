@@ -153,6 +153,9 @@ class Dfp_Datafeed_File_Reader extends Dfp_Datafeed_File_Abstract implements Dfp
     public function next()
     {
     	$this->_currentRecord = $this->getFormat()->loadNextRecord();
+    	if (is_array($this->_currentRecord)) {
+    		$this->_currentRecord = $this->filterRecord($this->_currentRecord);
+    	}
     	$this->_position++;
     }
     
@@ -298,5 +301,6 @@ class Dfp_Datafeed_File_Reader extends Dfp_Datafeed_File_Abstract implements Dfp
 			}
 			
 		}
+		return $record;
 	}
 }
