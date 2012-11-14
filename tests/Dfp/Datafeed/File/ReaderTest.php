@@ -360,4 +360,59 @@ class Dfp_Datafeed_File_ReaderTest extends PHPUnit_Framework_TestCase
             $this->assertEquals($results[$position], $record);
         }
     }
+    
+    public function testGetFilters()
+    {
+    	$sut = new Dfp_Datafeed_File_Reader();
+    	$this->assertEmpty($sut->getFilters());
+    }
+    
+    public function testAddFieldFilter()
+    {
+    	$mockFilter = $this->getMock('Zend_Filter_Interface');
+    	$sut = new Dfp_Datafeed_File_Reader();
+    	$sut->addFieldFilter($mockFilter);
+    	
+    	$this->assertEquals(array('global'=>array($mockFilter)), $sut->getFilters());
+    	
+    	$sut = new Dfp_Datafeed_File_Reader();
+    	$sut->addFieldFilter($mockFilter, 'test');
+    	 
+    	$this->assertEquals(array('fields'=>array('test'=>array($mockFilter))), $sut->getFilters());    	
+    }
+    
+    public function testAddHeaderFilter()
+    {
+    	$mockFilter = $this->getMock('Zend_Filter_Interface');
+    	$sut = new Dfp_Datafeed_File_Reader();
+    	$sut->addHeaderFilter($mockFilter);
+    	 
+    	$this->assertEquals(array('header'=>array($mockFilter)), $sut->getFilters());    	
+    }
+    
+    public function testAddFilter()
+    {
+    	$mockFilter = $this->getMock('Zend_Filter_Interface');
+    	$sut = new Dfp_Datafeed_File_Reader();
+    	$sut->addFilter($mockFilter);
+    	 
+    	$this->assertEquals(array('global'=>array($mockFilter)), $sut->getFilters());    	
+    	
+    	$mockFilter = $this->getMock('Zend_Filter_Interface');
+    	$sut = new Dfp_Datafeed_File_Reader();
+    	$sut->addFilter($mockFilter, 'test');
+
+    	$this->assertEquals(array('fields'=>array('test'=>array($mockFilter))), $sut->getFilters());
+
+    	$mockFilter = $this->getMock('Zend_Filter_Interface');
+    	$sut = new Dfp_Datafeed_File_Reader();
+    	$sut->addFilter($mockFilter, null, 'header');
+
+    	$this->assertEquals(array('header'=>array($mockFilter)), $sut->getFilters());
+    }
+    
+    public function testFilterRecord()
+    {
+    	$this->markTestIncomplete();
+    }
 }
