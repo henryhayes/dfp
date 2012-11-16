@@ -250,7 +250,6 @@ class Dfp_Datafeed_File_Reader extends Dfp_Datafeed_File_Abstract implements Dfp
 	{
 		if (array_key_exists('header', $this->_filters) && is_array($this->_filters['header'])) {
 			//first filter each header
-			$originalHeaders = array();
 			$filtered = array();
 
 			foreach ($record AS $key => $value) {
@@ -259,7 +258,6 @@ class Dfp_Datafeed_File_Reader extends Dfp_Datafeed_File_Abstract implements Dfp
 					$newHeader = $filter->filter($newHeader);
 				} 
 				$filtered[$newHeader] = $value;
-				$originalHeaders[$newHeader] = $key; //preserve the old value for filtering fields
 			}
 			$record = $filtered;
 		}
@@ -269,14 +267,13 @@ class Dfp_Datafeed_File_Reader extends Dfp_Datafeed_File_Abstract implements Dfp
 		if (array_key_exists('global', $this->_filters)) {
 			$filterFields = array_keys($record);
 		} elseif (array_key_exists('fields', $this->_filters)) {
-			
+			$possibleFields = array_keys($record);
 			$filterFields = array_intersect(
-								array_merge(array_keys($record), array_values($originalHeaders)), 
+								$possibleFields, 
 								array_keys($this->_filters['fields'])
 							);
 		}
 		
-		//todo: use original headers array to apply filters from before filtering headers.
 		foreach ($filterFields as $key) {
 			//loop through each global filter and apply.
 			if (array_key_exists('global', $this->_filters)) {
@@ -286,15 +283,7 @@ class Dfp_Datafeed_File_Reader extends Dfp_Datafeed_File_Abstract implements Dfp
 			}
 			
 			//loop through each field filter and apply.
-			if (array_key_exists('fields', $this->_filters)) {
-				$filters = array();
-			
-				if (array_key_exists($key, $this->_filters['fields'])) {
-					$filters = array_merge($filters, $this->_filters['fields'][$key]);
-				} 
-				if (array_key_exists($originalHeaders[$key], $this->_filters['fields'])) {
-					$filters = array_merge($filters, $this->_filters['fields'][$originalHeaders[$key]]);
-				}
+			if (array_key_exists('fields', $this->_filters) && array_key_exists($key, $this->_filters['fields'])) {
 				foreach ($this->_filters['fields'][$key] AS $filter) {
 					$record[$key] = $filter->filter($record[$key]);
 				}
