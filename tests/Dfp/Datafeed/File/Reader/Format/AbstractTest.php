@@ -96,55 +96,6 @@ class Dfp_Datafeed_File_Reader_Format_AbstractTest extends PHPUnit_Framework_Tes
         $this->fail('Exception not thrown');
     }
 
-
-    /**
-     * @todo Implement testCurrent().
-     */
-    public function testCurrent()
-    {
-        $sut = $this->getMockForAbstractClass('Dfp_Datafeed_File_Reader_Format_Abstract');
-        $this->assertNull($sut->current());
-    }
-
-    /**
-     * @todo Implement testKey().
-     */
-    public function testKey()
-    {
-        $sut = $this->getMockForAbstractClass('Dfp_Datafeed_File_Reader_Format_Abstract');
-        $this->assertEquals(0, $sut->key());
-    }
-
-    /**
-     * @todo Implement testNext().
-     */
-    public function testNext()
-    {
-        $sut = $this->getMockForAbstractClass('Dfp_Datafeed_File_Reader_Format_Abstract');
-        $sut->expects($this->once())->method('_loadNextRecord');
-        $sut->next();
-    }
-
-    /**
-     * @todo Implement testRewind().
-     */
-    public function testRewind()
-    {
-        $sut = $this->getMockForAbstractClass('Dfp_Datafeed_File_Reader_Format_Abstract');
-        $sut->expects($this->once())->method('_resetFeed');
-        $sut->next();
-        $sut->rewind();
-    }
-
-    /**
-     * @todo Implement testValid().
-     */
-    public function testValid()
-    {
-        $sut = $this->getMockForAbstractClass('Dfp_Datafeed_File_Reader_Format_Abstract');
-        $this->assertFalse($sut->valid());
-    }
-
     /**
      * @todo Implement testAddError().
      */
@@ -199,5 +150,21 @@ class Dfp_Datafeed_File_Reader_Format_AbstractTest extends PHPUnit_Framework_Tes
         $sut->setErrors(array('789'));
 
         $this->assertEquals(array('789'), $sut->getErrors());
+    }
+    
+    public function testLoadNextRecord()
+    {
+    	$sut = $this->getMockForAbstractClass('Dfp_Datafeed_File_Reader_Format_Abstract');
+    	$sut->expects($this->once())->method('_loadNextRecord');
+    	
+    	$sut->loadNextRecord();
+    }
+
+    public function testResetFeed()
+    {
+    	$sut = $this->getMockForAbstractClass('Dfp_Datafeed_File_Reader_Format_Abstract');
+    	$sut->expects($this->once())->method('_resetFeed');
+    	 
+    	$sut->resetFeed();
     }
 }
