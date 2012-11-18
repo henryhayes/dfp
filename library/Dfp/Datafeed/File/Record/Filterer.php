@@ -13,7 +13,7 @@
  * @package     Datafeed
  * @subpackage  File_Record_Filterer
  * @copyright   Copyright (c) 2012 PHP Datafeed Library
- * @since       2011-12-07
+ * @since       2012-11-18
  */
 /**
  * Dfp_Datafeed_File_Record_Filterer class.
@@ -23,7 +23,7 @@
  * @subpackage  File_Record_Filterer
  * @copyright   Copyright (c) 2012 PHP Datafeed Library
  * @author      Chris Riley <chris.riley@imhotek.net>
- * @since       2011-12-07
+ * @since       2012-11-18
  */
 class Dfp_Datafeed_File_Record_Filterer 
 {
