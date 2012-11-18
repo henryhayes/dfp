@@ -82,11 +82,18 @@ class Dfp_Datafeed_File_WriterTest extends PHPUnit_Framework_TestCase
 
     public function testWriteRecord()
     {
+    	$mockFilterer = $this->getMock('Dfp_Datafeed_File_Record_Filterer');
+    	$mockFilterer->expects($this->once())
+    	             ->method('filterRecord')
+    	             ->with($this->equalTo(array('data')))
+    	             ->will($this->returnArgument(0));
+    	
         $mockFormat = $this->getMock('Dfp_Datafeed_File_Writer_Format_Interface');
         $mockFormat->expects($this->once())->method('writeRecord')->with($this->equalTo(array('data')));
         
         $sut = new Dfp_Datafeed_File_Writer();
         $sut->setFormat($mockFormat);
+        $sut->setRecordFilterer($mockFilterer);
         $sut->writeRecord(array('data'));
     }
     
@@ -160,4 +167,20 @@ class Dfp_Datafeed_File_WriterTest extends PHPUnit_Framework_TestCase
         
         $this->assertEquals($expected, file_get_contents(vfsStream::url('base/test.csv')));
     }
+    
+    public function testGetRecordFilterer()
+    {
+    	$sut = new Dfp_Datafeed_File_Writer();
+    	$this->assertInstanceOf('Dfp_Datafeed_File_Record_Filterer', $sut->getRecordFilterer());
+    }
+    
+    public function testSetRecordFilterer()
+    {
+    	$sut = new Dfp_Datafeed_File_Writer();
+    	$mockFilterer = $this->getMock('Dfp_Datafeed_File_Record_Filterer');
+    	 
+    	$sut->setRecordFilterer($mockFilterer);
+    	 
+    	$this->assertSame($mockFilterer, $sut->getRecordFilterer());
+    }    
 }

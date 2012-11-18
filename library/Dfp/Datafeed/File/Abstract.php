@@ -28,6 +28,13 @@
  */
 class Dfp_Datafeed_File_Abstract
 {
+	/**
+	 * Holds a record filterer class
+	 * 
+	 * @var Dfp_Datafeed_File_Record_Filterer
+	 */
+	protected $_recordFilterer;	
+	
     /**
     * @see Dfp_Option_Interface::__construct()
     */
@@ -191,4 +198,29 @@ class Dfp_Datafeed_File_Abstract
         
         $this->_format = new $class();        
     }
+    
+    /**
+     * Getter for record filterer.
+     *
+     * @return Dfp_Datafeed_File_Record_Filterer
+     */
+    public function getRecordFilterer()
+    {
+    	if (!($this->_recordFilterer instanceof Dfp_Datafeed_File_Record_Filterer)) {
+    		$this->setRecordFilterer(new Dfp_Datafeed_File_Record_Filterer());
+    	}
+    	return $this->_recordFilterer;
+    }
+    
+    /**
+     * Setter for record filterer
+     *
+     * @param Dfp_Datafeed_File_Record_Filterer $filterer
+     * @return Dfp_Datafeed_File_Abstract
+     */
+    public function setRecordFilterer(Dfp_Datafeed_File_Record_Filterer $filterer)
+    {
+    	$this->_recordFilterer = $filterer;
+    	return $this;
+    }    
 }

@@ -56,11 +56,6 @@ class Dfp_Datafeed_File_Reader extends Dfp_Datafeed_File_Abstract implements Dfp
      */
     protected $_currentRecord;
     
-	/**
-	 * @var Dfp_Datafeed_File_Record_Filterer
-	 */
-	protected $_recordFilterer;
-    
     /**
     * @see Dfp_Option_Interface::setOptions()
     * @return Dfp_Datafeed_File_Reader
@@ -180,29 +175,4 @@ class Dfp_Datafeed_File_Reader extends Dfp_Datafeed_File_Abstract implements Dfp
     {
     	return $this->_position;
     } 
-
-	/**
-	 * Getter for record filterer.
-	 * 
-	 * @return Dfp_Datafeed_File_Record_Filterer
-	 */
-	public function getRecordFilterer()
-	{
-		if (!($this->_recordFilterer instanceof Dfp_Datafeed_File_Record_Filterer)) {
-			$this->setRecordFilterer(new Dfp_Datafeed_File_Record_Filterer());
-		}
-		return $this->_recordFilterer;
-	}
-	
-	/**
-	 * Setter for record filterer
-	 * 
-	 * @param Dfp_Datafeed_File_Record_Filterer $filterer
-	 * @return Dfp_Datafeed_File_Reader
-	 */
-	public function setRecordFilterer(Dfp_Datafeed_File_Record_Filterer $filterer)
-	{
-		$this->_recordFilterer = $filterer;
-		return $this;
-	}
 }
