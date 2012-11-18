@@ -118,6 +118,7 @@ class Dfp_Datafeed_File_Writer extends Dfp_Datafeed_File_Abstract implements Dfp
      */
     public function writeRecord(array $data)
     {
+    	$data = $this->getRecordFilterer()->filterRecord($data);
         $this->getFormat()->writeRecord($data);
         return $this;
     }
