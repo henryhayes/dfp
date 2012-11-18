@@ -54,9 +54,6 @@ class Dfp_Datafeed_TransferTest extends PHPUnit_Framework_TestCase
         $sut->retrieveFiles(array('test.txt','file.gif'), array('test.txt', 'images/file.gif'));
     }
 
-    /**
-     * @todo Implement testGetAdapter().
-     */
     public function testGetAdapter()
     {
         $sut = new Dfp_Datafeed_Transfer();
@@ -70,9 +67,6 @@ class Dfp_Datafeed_TransferTest extends PHPUnit_Framework_TestCase
         $this->fail('Exception not thrown');
     }
 
-    /**
-     * @todo Implement testGetAdapter().
-     */
     public function testSetAdapterString()
     {
         $name = 'test' . uniqid();
@@ -107,9 +101,6 @@ class Dfp_Datafeed_TransferTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('test', $sut->getAdapterNamespace());
     }
 
-    /**
-     * @todo Implement testSetAdapter().
-     */
     public function testSetAdapter()
     {
         $sut = new Dfp_Datafeed_Transfer();
@@ -120,9 +111,6 @@ class Dfp_Datafeed_TransferTest extends PHPUnit_Framework_TestCase
         $this->assertSame($mockAdapter, $sut->getAdapter());
     }
 
-    /**
-     * @todo Implement testSetConfig().
-     */
     public function testSetConfig()
     {
         $options = array('adapterNamespace'=>'Test_Namespace');
@@ -135,9 +123,6 @@ class Dfp_Datafeed_TransferTest extends PHPUnit_Framework_TestCase
         $sut->setConfig($config);
     }
 
-    /**
-     * @todo Implement testSetOptions().
-     */
     public function testSetOptions()
     {
         $options = array('adapter'=>'ftp','adapterOption'=>'value','adapterNamespace'=>'Test_Namespace');

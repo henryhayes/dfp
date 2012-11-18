@@ -73,7 +73,6 @@ class Dfp_Datafeed_File_Reader_Format_Csv_File
     /**
      * Get's next csv record.
      *
-     * @TODO throw a suitable exception if dialect isn't valid.
      * @return array
      */
     public function getRecord()

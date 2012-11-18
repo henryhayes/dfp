@@ -7,10 +7,6 @@ include_once 'vfsStream/vfsStream.php';
  */
 class Dfp_Datafeed_File_WriterTest extends PHPUnit_Framework_TestCase
 {
-
-    /**
-     * @todo Implement testGetXslt().
-     */
     public function testGetXslt()
     {
         $sut = new Dfp_Datafeed_File_Writer();
@@ -33,9 +29,6 @@ class Dfp_Datafeed_File_WriterTest extends PHPUnit_Framework_TestCase
         
     }
 
-    /**
-     * @todo Implement testSetXslt().
-     */
     public function testSetXslt()
     {
         $sut = new Dfp_Datafeed_File_Writer();
@@ -57,19 +50,12 @@ class Dfp_Datafeed_File_WriterTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($passed);
     }
 
-    /**
-     * @todo Implement testGetFormat().
-     */
     public function testGetFormat()
     {
         $sut = new Dfp_Datafeed_File_Writer();
         $this->assertInstanceOf('Dfp_Datafeed_File_Writer_Format_Csv', $sut->getFormat());
     }
 
-
-    /**
-     * @todo Implement testSetFormat().
-     */
     public function testSetFormat()
     {
         $sut = new Dfp_Datafeed_File_Writer();

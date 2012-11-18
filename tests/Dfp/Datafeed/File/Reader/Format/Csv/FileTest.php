@@ -25,9 +25,6 @@ class Dfp_Datafeed_File_Reader_Format_Csv_FileTest extends PHPUnit_Framework_Tes
         $this->assertSame($mockDialect, $sut->getDialect());
     }
 
-    /**
-     * @todo Implement testGetRecord().
-     */
     public function testGetRecord()
     {
         $dir = vfsStream::setup('base');
@@ -65,9 +62,6 @@ class Dfp_Datafeed_File_Reader_Format_Csv_FileTest extends PHPUnit_Framework_Tes
         $this->assertTrue($passed2);
     }
 
-    /**
-     * @todo Implement testGetRaw().
-     */
     public function testGetRaw()
     {
         $dir = vfsStream::setup('base');
@@ -89,9 +83,6 @@ class Dfp_Datafeed_File_Reader_Format_Csv_FileTest extends PHPUnit_Framework_Tes
         $this->assertTrue($passed);
     }
 
-    /**
-     * @todo Implement testOpen().
-     */
     public function testOpen()
     {
         $dir = vfsStream::setup('base');
@@ -122,7 +113,6 @@ class Dfp_Datafeed_File_Reader_Format_Csv_FileTest extends PHPUnit_Framework_Tes
     }
 
     /**
-     * @todo Implement testDetectHeader().
      * @dataProvider detectHeaderProvider
      */
     public function testDetectHeader($data,$result)
@@ -171,7 +161,6 @@ class Dfp_Datafeed_File_Reader_Format_Csv_FileTest extends PHPUnit_Framework_Tes
     }
 
     /**
-     * @todo Implement testDetectDialect().
      * @dataProvider detectDialectProvider
      */
     public function testDetectDialect($filecontents, $result)
@@ -216,9 +205,6 @@ class Dfp_Datafeed_File_Reader_Format_Csv_FileTest extends PHPUnit_Framework_Tes
         );
     }
 
-    /**
-     * @todo Implement testGenerateHeader().
-     */
     public function testGenerateHeader()
     {
         $dir = vfsStream::setup('base');

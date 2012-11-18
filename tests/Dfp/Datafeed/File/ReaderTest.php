@@ -18,9 +18,6 @@ class Dfp_Datafeed_File_ReaderTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('dialect', $sut->getDialect());
     }
 
-    /**
-     * @todo Implement testSetDialect().
-     */
     public function testSetDialect()
     {
         $sut = new Dfp_Datafeed_File_Reader();
@@ -67,9 +64,7 @@ class Dfp_Datafeed_File_ReaderTest extends PHPUnit_Framework_TestCase
 
         $sut->setLocation('location');
     }
-    /**
-     * @todo Implement testGetXslt().
-     */
+
     public function testGetXslt()
     {
         $sut = new Dfp_Datafeed_File_Reader();
@@ -92,9 +87,6 @@ class Dfp_Datafeed_File_ReaderTest extends PHPUnit_Framework_TestCase
         
     }
 
-    /**
-     * @todo Implement testSetXslt().
-     */
     public function testSetXslt()
     {
         $sut = new Dfp_Datafeed_File_Reader();
@@ -116,18 +108,12 @@ class Dfp_Datafeed_File_ReaderTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($passed);
     }
 
-    /**
-     * @todo Implement testGetFormat().
-     */
     public function testGetFormat()
     {
         $sut = new Dfp_Datafeed_File_Reader();
         $this->assertInstanceOf('Dfp_Datafeed_File_Reader_Format_Csv', $sut->getFormat());
     }
 
-    /**
-     * @todo Implement testGetFormat().
-     */
     public function testSetFormatString()
     {
         $name = 'test' . uniqid();
@@ -155,9 +141,6 @@ class Dfp_Datafeed_File_ReaderTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('test', $sut->getFormatNamespace());
     }    
     
-    /**
-     * @todo Implement testSetFormat().
-     */
     public function testSetFormat()
     {
         $sut = new Dfp_Datafeed_File_Reader();
@@ -168,9 +151,6 @@ class Dfp_Datafeed_File_ReaderTest extends PHPUnit_Framework_TestCase
         $this->assertSame($mockFormat, $sut->getFormat());
     }
 
-    /**
-     * @todo Implement testSetConfig().
-     */
     public function testSetConfig()
     {
         $options = array('location'=>'/var/feed/feed.csv');
@@ -183,9 +163,6 @@ class Dfp_Datafeed_File_ReaderTest extends PHPUnit_Framework_TestCase
         $sut->setConfig($config);
     }
 
-    /**
-     * @todo Implement testSetOptions().
-     */
     public function testSetOptions()
     {
         $options = array('format'=>'csv','dialect'=>'standard');

@@ -14,9 +14,6 @@ class Dfp_Datafeed_Transfer_Adapter_AbstractTest extends PHPUnit_Framework_TestC
         $sut->setConfig($config);
     }
     
-    /**
-    * @todo Implement testAddError().
-    */
     public function testAddError()
     {
         $sut = $this->getMockForAbstractClass('Dfp_Datafeed_Transfer_Adapter_Abstract');
@@ -25,9 +22,6 @@ class Dfp_Datafeed_Transfer_Adapter_AbstractTest extends PHPUnit_Framework_TestC
         $this->assertEquals(array('123'), $sut->getErrors());
     }
     
-    /**
-     * @todo Implement testAddErrors().
-     */
     public function testAddErrors()
     {
         $sut = $this->getMockForAbstractClass('Dfp_Datafeed_Transfer_Adapter_Abstract');
@@ -37,9 +31,6 @@ class Dfp_Datafeed_Transfer_Adapter_AbstractTest extends PHPUnit_Framework_TestC
         $this->assertEquals(array('123','456'), $sut->getErrors());
     }
     
-    /**
-     * @todo Implement testGetErrors().
-     */
     public function testGetErrors()
     {
         $sut = $this->getMockForAbstractClass('Dfp_Datafeed_Transfer_Adapter_Abstract');
@@ -47,9 +38,6 @@ class Dfp_Datafeed_Transfer_Adapter_AbstractTest extends PHPUnit_Framework_TestC
         $this->assertEmpty($sut->getErrors());
     }
     
-    /**
-     * @todo Implement testHasErrors().
-     */
     public function testHasErrors()
     {
         $sut = $this->getMockForAbstractClass('Dfp_Datafeed_Transfer_Adapter_Abstract');
@@ -57,9 +45,6 @@ class Dfp_Datafeed_Transfer_Adapter_AbstractTest extends PHPUnit_Framework_TestC
         $this->assertFalse($sut->hasErrors());
     }
     
-    /**
-     * @todo Implement testSetErrors().
-     */
     public function testSetErrors()
     {
         $sut = $this->getMockForAbstractClass('Dfp_Datafeed_Transfer_Adapter_Abstract');

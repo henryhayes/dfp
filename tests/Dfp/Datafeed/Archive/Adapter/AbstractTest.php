@@ -47,9 +47,6 @@ class Dfp_Datafeed_Archive_Adapter_AbstractTest extends PHPUnit_Framework_TestCa
         $this->assertEquals('test', $sut->getLocation());
     }
 
-    /**
-    * @todo Implement testAddError().
-    */
     public function testAddError()
     {
         $sut = $this->getMockForAbstractClass('Dfp_Datafeed_Archive_Adapter_Abstract');
@@ -58,9 +55,6 @@ class Dfp_Datafeed_Archive_Adapter_AbstractTest extends PHPUnit_Framework_TestCa
         $this->assertEquals(array('123'), $sut->getErrors());
     }
 
-    /**
-     * @todo Implement testAddErrors().
-     */
     public function testAddErrors()
     {
         $sut = $this->getMockForAbstractClass('Dfp_Datafeed_Archive_Adapter_Abstract');
@@ -70,9 +64,6 @@ class Dfp_Datafeed_Archive_Adapter_AbstractTest extends PHPUnit_Framework_TestCa
         $this->assertEquals(array('123','456'), $sut->getErrors());
     }
 
-    /**
-     * @todo Implement testGetErrors().
-     */
     public function testGetErrors()
     {
         $sut = $this->getMockForAbstractClass('Dfp_Datafeed_Archive_Adapter_Abstract');
@@ -80,9 +71,6 @@ class Dfp_Datafeed_Archive_Adapter_AbstractTest extends PHPUnit_Framework_TestCa
         $this->assertEmpty($sut->getErrors());
     }
 
-    /**
-     * @todo Implement testHasErrors().
-     */
     public function testHasErrors()
     {
         $sut = $this->getMockForAbstractClass('Dfp_Datafeed_Archive_Adapter_Abstract');
@@ -90,9 +78,6 @@ class Dfp_Datafeed_Archive_Adapter_AbstractTest extends PHPUnit_Framework_TestCa
         $this->assertFalse($sut->hasErrors());
     }
 
-    /**
-     * @todo Implement testSetErrors().
-     */
     public function testSetErrors()
     {
         $sut = $this->getMockForAbstractClass('Dfp_Datafeed_Archive_Adapter_Abstract');

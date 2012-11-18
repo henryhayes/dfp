@@ -7,9 +7,6 @@
  */
 class Dfp_Datafeed_File_Writer_Format_CsvTest extends PHPUnit_Framework_TestCase
 {
-    /**
-     * @todo Implement testGetDialect().
-     */
     public function testGetDialect()
     {
         $sut = new Dfp_Datafeed_File_Writer_Format_Csv();
@@ -32,9 +29,6 @@ class Dfp_Datafeed_File_Writer_Format_CsvTest extends PHPUnit_Framework_TestCase
         $this->assertEquals("\t", $dialect->getDelimiter());
     }
 
-    /**
-     * @todo Implement testSetDialect().
-     */
     public function testSetDialect()
     {
         $mockDialect = $this->getMock('Dfp_Datafeed_File_Format_Csv_Dialect_Interface');
