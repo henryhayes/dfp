@@ -25,7 +25,7 @@
  * @author      Chris Riley <chris.riley@imhotek.net>
  * @since       2012-11-18
  */
-class Dfp_Datafeed_File_Record_Validator 
+class Dfp_Datafeed_File_Record_Validator implements Dfp_Error_Interface
 {
 	/**
 	 * An array of validators to apply to each record before its returned.
@@ -33,7 +33,20 @@ class Dfp_Datafeed_File_Record_Validator
 	 * @var array
 	 */
 	protected $_validators = array();
-		
+	
+	/**
+	 * Holds an array of errors for this object.
+	 *
+	 * @var array
+	 */
+	protected $_errors = array();
+	
+	/**
+	 * Holds a list of fields required to be set for the record to be valid
+	 * 
+	 * @var array
+	 */
+	protected $_required = array();
 	/**
 	 * Add a validator
 	 *
@@ -62,13 +75,148 @@ class Dfp_Datafeed_File_Record_Validator
 		return $this->_validators;
 	}
 	
-	public function isValid($record)
+	/**
+	 * Adds a required field
+	 * 
+	 * @param string $field
+	 * @return Dfp_Datafeed_File_Record_Validator
+	 */
+	public function addRequiredField($field)
 	{
-		
+		$this->_required[] = $field;
+		return $this;
 	}
 	
-	public function getMessages()
+	/**
+	 * Sets required fields
+	 * 
+	 * @param array $fields
+	 * @return Dfp_Datafeed_File_Record_Validator
+	 */
+	public function setRequiredFields(array $fields)
 	{
-		
+		$this->_required = $fields;
+		return $this;
 	}
+	
+	/**
+	 * Add multiple required fields at once
+	 * 
+	 * @param array $fields
+	 * @return Dfp_Datafeed_File_Record_Validator
+	 */
+	public function addRequiredFields(array $fields)
+	{
+		foreach ($fields AS $field) {
+			$this->addRequiredField($field);
+		}
+		return $this;
+	}
+	
+	/**
+	 * Getter for required fields
+	 * 
+	 * @return array
+	 */
+	public function getRequiredFields()
+	{
+		return $this->_required;
+	}
+
+	/**
+	 * Checks if a given record is valid.
+	 * 
+	 * @param array $record
+	 * @return boolean
+	 */
+	public function isValid(array $record)
+	{
+		$required = array_diff($this->_required, array_keys($record));
+		
+		if (count($required)) {
+			foreach ($required AS $field) {
+				$this->addError(sprintf('Reqiured field %s is missing', $field));
+			}
+		}
+		
+		foreach ($record AS $field => $value) {
+			$break = false;
+			if (array_key_exists('global', $this->_validators)) {
+				foreach ($this->_validators['global'] AS $validatorInfo) {
+					list($validator, $breakChain) = $validatorInfo;
+					if (!$validator->isValid($value)) {
+						$this->addErrors($validator->getMessages());
+						if ($breakChain) {
+							$break = true;
+							break;
+						}
+					}
+				}
+			}
+			if (
+				!$break && 
+				array_key_exists('field', $this->_validators) && 
+				array_key_exists($field, $this->_validators['field'])
+			) {
+				foreach ($this->_validators['field'][$field] AS $validatorInfo) {
+					list($validator, $breakChain) = $validatorInfo;
+					if (!$validator->isValid($value)) {
+						$this->addErrors($validator->getMessages());
+						if ($breakChain) {
+							break;
+						}
+					}
+				}
+			}
+		}
+		return $this->hasErrors();
+	}
+
+	/**
+	 * @see Dfp_Error_Interface::addError()
+	 * @return Dfp_Datafeed_File_Reader_Format_Abstract
+	 */
+	public function addError($message)
+	{
+		$this->_errors[] = $message;
+		return $this;
+	}
+	
+	/**
+	 * @see Dfp_Error_Interface::addErrors()
+	 * @return Dfp_Datafeed_File_Reader_Format_Abstract
+	 */
+	public function addErrors(array $messages)
+	{
+		foreach ($messages AS $message) {
+			$this->addError($message);
+		}
+		return $this;
+	}
+	
+	/**
+	 * @see Dfp_Error_Interface::getErrors()
+	 */
+	public function getErrors()
+	{
+		return $this->_errors;
+	}
+	
+	/**
+	 * @see Dfp_Error_Interface::hasErrors()
+	 */
+	public function hasErrors()
+	{
+		return (bool) count($this->_errors);
+	}
+	
+	/**
+	 * @see Dfp_Error_Interface::setErrors()
+	 * @return Dfp_Datafeed_File_Reader_Format_Abstract
+	 */
+	public function setErrors(array $messages)
+	{
+		$this->_errors = $messages;
+		return $this;
+	}	
 }
