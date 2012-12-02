@@ -145,11 +145,28 @@ class Dfp_Datafeed_File_Reader extends Dfp_Datafeed_File_Abstract implements Dfp
      */
     public function next()
     {
-    	$this->_currentRecord = $this->getFormat()->loadNextRecord();
-    	if (is_array($this->_currentRecord)) {
+    	do {
+    		$this->_currentRecord = $this->getFormat()->loadNextRecord();
+    		if (!is_array($this->_currentRecord)) {
+    			return;
+    		}
+    		$this->_position++;
     		$this->_currentRecord = $this->getRecordFilterer()->filterRecord($this->_currentRecord);
-    	}
-    	$this->_position++;
+    		$valid = $this->getRecordValidator()->validateRecord($this->_currentRecord);
+    		
+    		if (!$valid) {
+    			$errors = $this->getRecordValidator()->getErrors();
+    			if (is_array($errors)) {
+    				foreach ($errors AS $error) {
+    					$this->addError(sprintf('Validation error on line %d: %s', $this->_position, $error));
+    				}
+    			} else {
+    				$this->addError(sprintf('Validation error on line %d', $this->_position));
+    			}
+    		}
+    		
+    	} while (!$valid);
+    	
     }
     
     /**

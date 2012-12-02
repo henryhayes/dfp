@@ -131,6 +131,8 @@ class Dfp_Datafeed_File_Record_Validator implements Dfp_Error_Interface
 	 */
 	public function validateRecord(array $record)
 	{
+		$this->setErrors(array());
+		
 		if (count($this->_required)) {
 			foreach ($this->_required AS $field) {
 				if (!array_key_exists($field, $record) || empty($record[$field]) ) {

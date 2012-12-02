@@ -35,6 +35,13 @@ class Dfp_Datafeed_File_Abstract
 	 */
 	protected $_recordFilterer;	
 	
+	/**
+	 * Holds a record validator class
+	 *
+	 * @var Dfp_Datafeed_File_Record_Validator
+	 */	
+	protected $_recordValidator;
+	
     /**
     * @see Dfp_Option_Interface::__construct()
     */
@@ -221,6 +228,31 @@ class Dfp_Datafeed_File_Abstract
     public function setRecordFilterer(Dfp_Datafeed_File_Record_Filterer $filterer)
     {
     	$this->_recordFilterer = $filterer;
+    	return $this;
+    }  
+
+    /**
+     * Getter for record validator.
+     *
+     * @return Dfp_Datafeed_File_Record_Validator
+     */
+    public function getRecordValidator()
+    {
+    	if (!($this->_recordValidator instanceof Dfp_Datafeed_File_Record_Validator)) {
+    		$this->setRecordValidator(new Dfp_Datafeed_File_Record_Validator());
+    	}
+    	return $this->_recordValidator;
+    }
+    
+    /**
+     * Setter for record validator
+     *
+     * @param Dfp_Datafeed_File_Record_Validator $validator
+     * @return Dfp_Datafeed_File_Abstract
+     */
+    public function setRecordValidator(Dfp_Datafeed_File_Record_Validator $validator)
+    {
+    	$this->_recordValidator = $validator;
     	return $this;
     }    
 }
