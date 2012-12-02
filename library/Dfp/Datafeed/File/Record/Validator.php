@@ -129,13 +129,13 @@ class Dfp_Datafeed_File_Record_Validator implements Dfp_Error_Interface
 	 * @param array $record
 	 * @return boolean
 	 */
-	public function isValid(array $record)
+	public function validateRecord(array $record)
 	{
-		$required = array_diff($this->_required, array_keys($record));
-		
-		if (count($required)) {
-			foreach ($required AS $field) {
-				$this->addError(sprintf('Reqiured field %s is missing', $field));
+		if (count($this->_required)) {
+			foreach ($this->_required AS $field) {
+				if (!array_key_exists($field, $record) || empty($record[$field]) ) {
+					$this->addError(sprintf('Reqiured field %s is missing', $field));
+				}
 			}
 		}
 		
@@ -143,7 +143,7 @@ class Dfp_Datafeed_File_Record_Validator implements Dfp_Error_Interface
 			$break = false;
 			if (array_key_exists('global', $this->_validators)) {
 				foreach ($this->_validators['global'] AS $validatorInfo) {
-					list($validator, $breakChain) = $validatorInfo;
+					list($validator, $breakChain) = array_values($validatorInfo);
 					if (!$validator->isValid($value)) {
 						$this->addErrors($validator->getMessages());
 						if ($breakChain) {
@@ -155,11 +155,11 @@ class Dfp_Datafeed_File_Record_Validator implements Dfp_Error_Interface
 			}
 			if (
 				!$break && 
-				array_key_exists('field', $this->_validators) && 
-				array_key_exists($field, $this->_validators['field'])
+				array_key_exists('fields', $this->_validators) && 
+				array_key_exists($field, $this->_validators['fields'])
 			) {
-				foreach ($this->_validators['field'][$field] AS $validatorInfo) {
-					list($validator, $breakChain) = $validatorInfo;
+				foreach ($this->_validators['fields'][$field] AS $validatorInfo) {
+					list($validator, $breakChain) = array_values($validatorInfo);
 					if (!$validator->isValid($value)) {
 						$this->addErrors($validator->getMessages());
 						if ($breakChain) {
@@ -169,7 +169,7 @@ class Dfp_Datafeed_File_Record_Validator implements Dfp_Error_Interface
 				}
 			}
 		}
-		return $this->hasErrors();
+		return !$this->hasErrors();
 	}
 
 	/**
