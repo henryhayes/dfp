@@ -338,134 +338,126 @@ class Dfp_Datafeed_File_ReaderTest extends PHPUnit_Framework_TestCase
         }
     }
     
-    public function testGetFilters()
-    {
-    	$sut = new Dfp_Datafeed_File_Reader();
-    	$this->assertEmpty($sut->getFilters());
-    }
-    
-    public function testAddFieldFilter()
-    {
-    	$mockFilter = $this->getMock('Zend_Filter_Interface');
-    	$sut = new Dfp_Datafeed_File_Reader();
-    	$sut->addFieldFilter($mockFilter);
-    	
-    	$this->assertEquals(array('global'=>array($mockFilter)), $sut->getFilters());
-    	
-    	$sut = new Dfp_Datafeed_File_Reader();
-    	$sut->addFieldFilter($mockFilter, 'test');
-    	 
-    	$this->assertEquals(array('fields'=>array('test'=>array($mockFilter))), $sut->getFilters());    	
-    }
-    
-    public function testAddHeaderFilter()
-    {
-    	$mockFilter = $this->getMock('Zend_Filter_Interface');
-    	$sut = new Dfp_Datafeed_File_Reader();
-    	$sut->addHeaderFilter($mockFilter);
-    	 
-    	$this->assertEquals(array('header'=>array($mockFilter)), $sut->getFilters());    	
-    }
-    
-    public function testAddFilter()
-    {
-    	$mockFilter = $this->getMock('Zend_Filter_Interface');
-    	$sut = new Dfp_Datafeed_File_Reader();
-    	$sut->addFilter($mockFilter);
-    	 
-    	$this->assertEquals(array('global'=>array($mockFilter)), $sut->getFilters());    	
-    	
-    	$mockFilter = $this->getMock('Zend_Filter_Interface');
-    	$sut = new Dfp_Datafeed_File_Reader();
-    	$sut->addFilter($mockFilter, 'test');
-
-    	$this->assertEquals(array('fields'=>array('test'=>array($mockFilter))), $sut->getFilters());
-
-    	$mockFilter = $this->getMock('Zend_Filter_Interface');
-    	$sut = new Dfp_Datafeed_File_Reader();
-    	$sut->addFilter($mockFilter, null, 'header');
-
-    	$this->assertEquals(array('header'=>array($mockFilter)), $sut->getFilters());
-    }
-    
-    /**
-     * @dataProvider filterRecordProvider 
-     */
-    public function testFilterRecord($record, $filters, $expected)
-    {
-		$sut = new Dfp_Datafeed_File_Reader();
-		
-		foreach ($filters AS $filter) {
-			call_user_func_array(array($sut, 'addFilter'), $filter);
-		}
-		
-		$this->assertEquals($expected,$sut->filterRecord($record));
-    }
-    
-    public function filterRecordProvider()
-    {
-    	$mockFilter = $this->getMock('Zend_Filter_Interface');
-    	$mockFilter->expects($this->any())
-    	           ->method('filter')
-    	           ->will($this->returnCallback('strtoupper'));
-    	return array(
-    		//Tests no action with no filters
-    		array(
-    			array('noaction'=>'noaction'),
-    			array(),
-    			array('noaction'=>'noaction')
-    		),
-    		//tests action of field specific filter
-    		array(
-    			array('filterme'=>'alllower', 'butnotme'=>'alllower'),
-    			array(array($mockFilter, 'filterme')),
-    			array('filterme'=>'ALLLOWER', 'butnotme'=>'alllower'),
-    		),
-    		//Tests action of global filter
-    		array(
-    			array('filterme'=>'alllower', 'andme'=>'alllower'),
-    			array(array($mockFilter)),
-    			array('filterme'=>'ALLLOWER', 'andme'=>'ALLLOWER'),
-    		),
-    		//tests action of header filter
-    		array(
-    			array('filterme'=>'alllower', 'andme'=>'alllower'),
-    			array(array($mockFilter,null,'header')),
-    			array('FILTERME'=>'alllower', 'ANDME'=>'alllower')
-    		),
-    		//tests action of filter on a filtered header	
-    		array(
-    			array('filterme'=>'alllower', 'butnotme'=>'alllower'),
-    			array(array($mockFilter,null,'header'), array($mockFilter, 'FILTERME')),
-    			array('FILTERME'=>'ALLLOWER', 'BUTNOTME'=>'alllower'),
-    		),    	
-    	);
-    }
-    
     public function testNextWithFilter()
     {
-		$sut = $this->getMock('Dfp_Datafeed_File_Reader', array('filterRecord'));
-		$sut->expects($this->once())
-		    ->method('filterRecord')
-		    ->with($this->equalTo(array('xyz')))
-		    ->will($this->returnValue(array('first'=>'abc')));
-		$mockAdapter = $this->getMock('Dfp_Datafeed_File_Reader_Format_Interface');
-		$mockAdapter->expects($this->once())
-		            ->method('loadNextRecord')
-		            ->will($this->returnValue(array('xyz')));
-		
-		$sut->setFormat($mockAdapter);
-		$sut->next();
-		
-		$sut = $this->getMock('Dfp_Datafeed_File_Reader', array('filterRecord'));
-		$sut->expects($this->never())
-		    ->method('filterRecord');
-		$mockAdapter = $this->getMock('Dfp_Datafeed_File_Reader_Format_Interface');
-		$mockAdapter->expects($this->once())
-		            ->method('loadNextRecord')
-		            ->will($this->returnValue(null)); //eg end of file
-		
-		$sut->setFormat($mockAdapter);
-		$sut->next();		
+    	$sut = new Dfp_Datafeed_File_Reader();
+
+    	$mockAdapter = $this->getMock('Dfp_Datafeed_File_Reader_Format_Interface');
+    	$mockAdapter->expects($this->once())
+    				->method('loadNextRecord')
+    				->will($this->returnValue(array('xyz')));
+    
+    	$mockFilterer = $this->getMock('Dfp_Datafeed_File_Record_Filterer');
+    	$mockFilterer->expects($this->once())
+    				 ->method('filterRecord')
+    				 ->with($this->equalTo(array('xyz')))
+    				 ->will($this->returnValue(array('first'=>'abc')));
+    	
+    	$sut->setRecordFilterer($mockFilterer);
+    	$sut->setFormat($mockAdapter);
+    	$sut->next();
+    
+    	$sut = new Dfp_Datafeed_File_Reader();
+    	$mockFilterer = $this->getMock('Dfp_Datafeed_File_Record_Filterer');
+    	$mockFilterer->expects($this->never())
+    		         ->method('filterRecord');
+    	$mockAdapter = $this->getMock('Dfp_Datafeed_File_Reader_Format_Interface');
+    	$mockAdapter->expects($this->once())
+    				->method('loadNextRecord')
+    				->will($this->returnValue(null)); //eg end of file
+    	
+    	$sut->setRecordFilterer($mockFilterer);
+    	$sut->setFormat($mockAdapter);
+    	$sut->next();
     }
+    
+    public function testGetRecordFilterer()
+    {
+    	$sut = new Dfp_Datafeed_File_Reader();
+    	$this->assertInstanceOf('Dfp_Datafeed_File_Record_Filterer', $sut->getRecordFilterer());
+    }
+    
+    public function testSetRecordFilterer()
+    {
+    	$sut = new Dfp_Datafeed_File_Reader();
+    	$mockFilterer = $this->getMock('Dfp_Datafeed_File_Record_Filterer');
+    	
+    	$sut->setRecordFilterer($mockFilterer);
+    	
+    	$this->assertSame($mockFilterer, $sut->getRecordFilterer());
+    }
+    
+    public function testGetRecordValidator()
+    {
+    	$sut = new Dfp_Datafeed_File_Reader();
+    	$this->assertInstanceOf('Dfp_Datafeed_File_Record_Validator', $sut->getRecordValidator());
+    }
+    
+    public function testSetRecordValidator()
+    {
+    	$sut = new Dfp_Datafeed_File_Reader();
+    	$mockValidator = $this->getMock('Dfp_Datafeed_File_Record_Validator');
+    	 
+    	$sut->setRecordValidator($mockValidator);
+    	 
+    	$this->assertSame($mockValidator, $sut->getRecordValidator());
+    }  
+
+    public function testNextWithValidator()
+    {
+    	$sut = new Dfp_Datafeed_File_Reader();
+    
+    	$mockAdapter = $this->getMock('Dfp_Datafeed_File_Reader_Format_Interface');
+    	$mockAdapter->expects($this->once())
+    	            ->method('loadNextRecord')
+    	            ->will($this->returnValue(array('xyz')));
+    
+    	$mockValidator = $this->getMock('Dfp_Datafeed_File_Record_Validator');
+    	$mockValidator->expects($this->once())
+    	              ->method('validateRecord')
+    	              ->with($this->equalTo(array('xyz')))
+    	              ->will($this->returnValue(true));
+    	 
+    	$sut->setRecordValidator($mockValidator);
+    	$sut->setFormat($mockAdapter);
+    	$sut->next();
+    
+    	$sut = new Dfp_Datafeed_File_Reader();
+    	$mockValidator = $this->getMock('Dfp_Datafeed_File_Record_Validator');
+    	$mockValidator->expects($this->never())
+    	              ->method('validateRecord');
+    	$mockAdapter = $this->getMock('Dfp_Datafeed_File_Reader_Format_Interface');
+    	$mockAdapter->expects($this->once())
+    	            ->method('loadNextRecord')
+    	            ->will($this->returnValue(null)); //eg end of file
+    	 
+    	$sut->setRecordValidator($mockValidator);
+    	$sut->setFormat($mockAdapter);
+    	$sut->next();
+    	
+    	//add test for invalid row
+    	
+    	$mockAdapter = $this->getMock('Dfp_Datafeed_File_Reader_Format_Interface');
+    	$mockAdapter->expects($this->exactly(2))
+    	            ->method('loadNextRecord')
+    	            ->will($this->returnValue(array('xyz')));
+    	
+    	$mockAdapter->expects($this->once())
+    	            ->method('addError')
+    	            ->with($this->equalTo('Validation error on line 1: error'));
+    	
+    	$mockValidator = $this->getMock('Dfp_Datafeed_File_Record_Validator');
+    	$mockValidator->expects($this->exactly(2))
+    	              ->method('validateRecord')
+    	              ->with($this->equalTo(array('xyz')))
+    	              ->will($this->onConsecutiveCalls(false,true));
+    	$mockValidator->expects($this->once())
+    	              ->method('getErrors')
+    	              ->will($this->returnValue(array('error')));
+    	
+    	$sut->setRecordValidator($mockValidator);
+    	$sut->setFormat($mockAdapter);
+    	$sut->next();    	
+    	
+    }    
 }

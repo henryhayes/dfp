@@ -118,6 +118,14 @@ class Dfp_Datafeed_File_Writer extends Dfp_Datafeed_File_Abstract implements Dfp
      */
     public function writeRecord(array $data)
     {
+    	$data = $this->getRecordFilterer()->filterRecord($data);
+    	if (!$this->getRecordValidator()->validateRecord($data)) {
+    		$errors = $this->getRecordValidator()->getErrors();
+    		foreach ($errors AS $error) {
+    			$this->addError(sprintf('Validation error: %s', $error));
+    		}
+    		return;
+    	}
         $this->getFormat()->writeRecord($data);
         return $this;
     }
