@@ -28,29 +28,15 @@
  */
 
 abstract class Dfp_Datafeed_File_Format_Ascii_Dialect_Abstract
+	extends Dfp_Datafeed_File_Format_Dialect_Abstract
     implements Dfp_Datafeed_File_Format_Ascii_Dialect_Interface
 {
-    /**
-     * The line return character
-     *
-     * @var string
-     */
-    protected $_lineReturn = "\n";
-
     /**
      * Contains the amount of lines to skip.
      *
      * @var int
      */
     protected $_skipLines = 0;
-
-    /**
-     * @see Dfp_Datafeed_File_Format_Csv_Dialect_Interface::getLineReturn()
-     */
-    public function getLineReturn()
-    {
-        return $this->_lineReturn;
-    }
 
     /**
      * Sets the amount of lines to skip.
