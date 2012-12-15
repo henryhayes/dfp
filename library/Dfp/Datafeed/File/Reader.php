@@ -99,35 +99,6 @@ class Dfp_Datafeed_File_Reader extends Dfp_Datafeed_File_Abstract implements Dfp
     {
         $this->_format = $format;
         return $this;
-    }    
-
-    /**
-     * @see Dfp_Datafeed_File_Reader_Interface::getXslt()
-     * @return string
-     */
-    public function getXslt()
-    {
-        $format = $this->getFormat();
-        if (!($format instanceof Dfp_Datafeed_File_Reader_Format_Xml)) {
-            throw new Dfp_Datafeed_File_Reader_Exception('getXslt can only be called when the format is XML');
-        }
-    
-        return $format->getXslt();
-    }
-    
-    /**
-     * @see Dfp_Datafeed_File_Reader_Interface::setXslt()
-     * @return Dfp_Datafeed_File_Reader
-     */
-    public function setXslt($xslt)
-    {
-        $format = $this->getFormat();
-        if (!($format instanceof Dfp_Datafeed_File_Reader_Format_Xml)) {
-            throw new Dfp_Datafeed_File_Reader_Exception('setXslt can only be called when the format is XML');
-        }
-    
-        $format->setXslt($xslt);
-        return $this;
     }
     
     /**
@@ -192,4 +163,19 @@ class Dfp_Datafeed_File_Reader extends Dfp_Datafeed_File_Abstract implements Dfp
     {
     	return $this->_position;
     } 
+    
+    /**
+     * @param string $method
+     * @param array $args
+     * @throws Dfp_Datafeed_File_Reader_Exception
+     * @return mixed
+     */
+    public function __call($method, $args)
+    {
+    	if (method_exists($this->getFormat(), $method)) {
+    		return call_user_func_array(array($this->getFormat(), $method), $args);
+    	}
+    	
+    	throw new Dfp_Datafeed_File_Reader_Exception(sprintf('Method %s dosn\'t exist in format class', $method));
+    }
 }

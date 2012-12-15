@@ -41,20 +41,4 @@ interface Dfp_Datafeed_File_Reader_Interface extends Dfp_Datafeed_File_Interface
      * @param Dfp_Datafeed_File_Reader_Format_Interface $format
      */
     public function setFormat(Dfp_Datafeed_File_Reader_Format_Interface $format);
-
-    /**
-     * Getter for Xslt location
-     *
-     * @throws Dfp_Datafeed_File_Reader_Exception if format type isn't XML.
-     * @return string
-     */
-    public function getXslt();
-
-    /**
-     * Setter for Xslt location
-     *
-     * @throws Dfp_Datafeed_File_Reader_Exception if format type isn't XML.
-     * @param string $xslt
-     */
-    public function setXslt($xslt);
 }

@@ -65,29 +65,7 @@ class Dfp_Datafeed_File_ReaderTest extends PHPUnit_Framework_TestCase
         $sut->setLocation('location');
     }
 
-    public function testGetXslt()
-    {
-        $sut = new Dfp_Datafeed_File_Reader();
-        $mockFormat = $this->getMock('Dfp_Datafeed_File_Reader_Format_Xml');
-        $mockFormat->expects($this->once())->method('getXslt')->will($this->returnValue('xslt'));
-        
-        $passed = false;
-        
-        try {
-            $sut->getXslt();
-        } catch (Dfp_Datafeed_File_Reader_Exception $e) {
-            if ($e->getMessage() == 'getXslt can only be called when the format is XML') {
-                $passed = true;
-            }
-        }
-        
-        $sut->setFormat($mockFormat);
-        $this->assertEquals('xslt', $sut->getXslt());
-        $this->assertTrue($passed);
-        
-    }
-
-    public function testSetXslt()
+    public function test__call()
     {
         $sut = new Dfp_Datafeed_File_Reader();
         $mockFormat = $this->getMock('Dfp_Datafeed_File_Reader_Format_Xml');
@@ -98,7 +76,7 @@ class Dfp_Datafeed_File_ReaderTest extends PHPUnit_Framework_TestCase
         try {
             $sut->setXslt('xslt');
         } catch (Dfp_Datafeed_File_Reader_Exception $e) {
-            if ($e->getMessage() == 'setXslt can only be called when the format is XML') {
+            if ($e->getMessage() == 'Method setXslt dosn\'t exist in format class') {
                 $passed = true;
             }
         }
