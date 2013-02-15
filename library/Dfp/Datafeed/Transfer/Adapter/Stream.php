@@ -34,7 +34,7 @@ class Dfp_Datafeed_Transfer_Adapter_Stream extends Dfp_Datafeed_Transfer_Adapter
      *
      * @var string
      */
-    protected $_schema = 'http';
+    protected $_schema;
 
     /**
      * Holds the hostname of the server to connect to
@@ -314,8 +314,12 @@ class Dfp_Datafeed_Transfer_Adapter_Stream extends Dfp_Datafeed_Transfer_Adapter
      */
     public function getUri()
     {
-        $uri = $this->getSchema() . '://';
-
+    	$uri = '';
+    
+    	if (!is_null($this->getSchema())) {
+        	$uri = $this->getSchema() . '://';
+    	}
+    	
         if (!is_null($this->getUsername())) {
             $uri .= $this->getUsername();
             if (!is_null($this->getPassword())) {
@@ -325,7 +329,9 @@ class Dfp_Datafeed_Transfer_Adapter_Stream extends Dfp_Datafeed_Transfer_Adapter
         }
 
         if (is_null($this->getHost())) {
-            throw new Dfp_Datafeed_Transfer_Exception('Host must be set');
+            throw new Dfp_Datafeed_Transfer_Exception(
+            	'Host must be set. For local transfers, set it to the destination directory'
+            );
         }
 
         $uri .= $this->getHost();

@@ -39,7 +39,7 @@ class Dfp_Datafeed_Transfer_Adapter_StreamTest extends PHPUnit_Framework_TestCas
     public function testGetSchema()
     {
         $sut = new Dfp_Datafeed_Transfer_Adapter_Stream();
-        $this->assertEquals('http', $sut->getSchema());
+        $this->assertNull($sut->getSchema());
     }
 
     public function testSetHost()
@@ -172,7 +172,7 @@ class Dfp_Datafeed_Transfer_Adapter_StreamTest extends PHPUnit_Framework_TestCas
     public function getUriProvider()
     {
         return array(
-            array(array(), null, 'Host must be set'),
+            array(array(), null, 'Host must be set. For local transfers, set it to the destination directory'),
             array(array('host'=>'ftp.example.com', 'schema'=>'ftp'), 'ftp://ftp.example.com'),
             array(array('host'=>'ftp.example.com', 'schema'=>'ftp', 'username'=>'user'), 'ftp://user@ftp.example.com'),
             array(array('host'=>'ftp.example.com', 'schema'=>'ftp', 'password'=>'pass'), 'ftp://ftp.example.com'),
@@ -181,6 +181,7 @@ class Dfp_Datafeed_Transfer_Adapter_StreamTest extends PHPUnit_Framework_TestCas
                 array('host'=>'ftp.example.com', 'schema'=>'ftp', 'username'=>'user', 'password'=>'pass'),
                 'ftp://user:pass@ftp.example.com'
             ),
+        	array(array('host'=>'/var/files'), '/var/files')
         );
     }
 
