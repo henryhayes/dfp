@@ -15,6 +15,16 @@ class Dfp_Datafeed_TransferTest extends PHPUnit_Framework_TestCase
                     ->with($this->equalTo('test.txt'), $this->equalTo('test.csv'));
 
         $sut = new Dfp_Datafeed_Transfer();
+        
+        $passed = false;
+        try {
+        	$sut->sendFile('test.txt', 'test.csv');
+        } catch (Dfp_Datafeed_Transfer_Exception $e) {
+        	$passed = true;
+        }
+        
+        $this->assertTrue($passed, 'Failed to throw exception when adapter is missing');        
+        
         $sut->setAdapter($mockAdapter);
 
         $sut->sendFile('test.txt', 'test.csv');
@@ -28,6 +38,16 @@ class Dfp_Datafeed_TransferTest extends PHPUnit_Framework_TestCase
                     ->with($this->equalTo('test.txt'), $this->equalTo('test.csv'));
 
         $sut = new Dfp_Datafeed_Transfer();
+
+        $passed = false;
+        try {
+        	$sut->retrieveFile('test.txt', 'test.csv');
+        } catch (Dfp_Datafeed_Transfer_Exception $e) {
+        	$passed = true;
+        }
+        
+        $this->assertTrue($passed, 'Failed to throw exception when adapter is missing');        
+        
         $sut->setAdapter($mockAdapter);
 
         $sut->retrieveFile('test.txt', 'test.csv');
@@ -57,48 +77,7 @@ class Dfp_Datafeed_TransferTest extends PHPUnit_Framework_TestCase
     public function testGetAdapter()
     {
         $sut = new Dfp_Datafeed_Transfer();
-        try {
-            $sut->getAdapter();
-        } catch (Dfp_Datafeed_Transfer_Exception $e) {
-        	$this->assertEquals($e->getMessage(), 'Invalid Adapter Specified');
-        	return;
-        }
-
-        $this->fail('Exception not thrown');
-    }
-
-    public function testSetAdapterString()
-    {
-        $name = 'test' . uniqid();
-        $className = 'Dfp_Datafeed_Transfer_Adapter_' . ucfirst($name);
-
-        $sut = new Dfp_Datafeed_Transfer();
-        $mockAdapter = $this->getMock(
-        	'Dfp_Datafeed_Transfer_Adapter_Interface',
-        	array(),
-        	array(),
-        	$className
-        );
-
-        $sut->setAdapterString($name);
-
-        $this->assertInstanceOf($className, $sut->getAdapter());
-    }
-
-    public function testGetAdapterNamespace()
-    {
-        $sut = new Dfp_Datafeed_Transfer();
-
-        $this->assertEquals('Dfp_Datafeed_Transfer_Adapter', $sut->getAdapterNamespace());
-    }
-
-    public function testSetAdapterNamespace()
-    {
-        $sut = new Dfp_Datafeed_Transfer();
-
-        $sut->setAdapterNamespace('test');
-
-        $this->assertEquals('test', $sut->getAdapterNamespace());
+        $this->assertNull($sut->getAdapter());
     }
 
     public function testSetAdapter()
@@ -125,22 +104,20 @@ class Dfp_Datafeed_TransferTest extends PHPUnit_Framework_TestCase
 
     public function testSetOptions()
     {
-        $options = array('adapter'=>'ftp','adapterOption'=>'value','adapterNamespace'=>'Test_Namespace');
+        $options = array('adapter'=>array('classname'=>'ftp'));
 
-        $sut = $this->getMock('Dfp_Datafeed_Transfer', array('getAdapter','setAdapterString', 'setAdapterNamespace'));
+        $sut = $this->getMock('Dfp_Datafeed_Transfer', array('setAdapter'));
 
-        $mockAdapter = $this->getMock('Dfp_Datafeed_Transfer_Adapter_Interface');
-        $mockAdapter->expects($this->once())->method('setOptions')
-                    ->with($this->equalTo(array('adapterOption'=>'value')));
-        $sut->expects($this->any())->method('getAdapter')->will($this->returnValue($mockAdapter));
-
-        $sut->expects($this->once())->method('setAdapterString')->with($this->equalTo('ftp'));
-        $sut->expects($this->once())->method('setAdapterNamespace')->with($this->equalTo('Test_Namespace'));
+		$sut->expects($this->once())
+		    ->method('setAdapter')
+		    ->with($this->isInstanceOf('Dfp_Datafeed_Transfer_Adapter_Ftp'));
 
         $sut->setOptions($options);
 
         //test with a adapter instance
 
+        $sut = new Dfp_Datafeed_Transfer();
+        
         $mockAdapter = $this->getMock('Dfp_Datafeed_Transfer_Adapter_Interface');
         $options = array('adapter'=>$mockAdapter);
 
@@ -148,32 +125,6 @@ class Dfp_Datafeed_TransferTest extends PHPUnit_Framework_TestCase
         $sut->setOptions($options);
 
         $this->assertEquals($mockAdapter, $sut->getAdapter());
-
-        //test with invalid adapter
-
-        $passed = false;
-        $sut = new Dfp_Datafeed_Transfer();
-        $options = array('adapter'=>array());
-        try {
-            $sut->setOptions($options);
-        } catch (Dfp_Datafeed_Transfer_Exception $e) {
-            if ($e->getMessage() == 'Invalid adapter specified') {
-                $passed = true;
-            }
-        }
-        $this->assertTrue($passed, 'Adapter exception not thrown');
-
-        $sut = new Dfp_Datafeed_Transfer();
-        $options = array('adapterNamespace'=>array());
-        try {
-            $sut->setOptions($options);
-        } catch (Dfp_Datafeed_Transfer_Exception $e) {
-            if ($e->getMessage() == 'Invalid adapter namespace specified') {
-                return;
-            }
-        }
-
-        $this->fail('Adapter namespace exception not thrown');
     }
 
     public function test__construct()
@@ -204,6 +155,16 @@ class Dfp_Datafeed_TransferTest extends PHPUnit_Framework_TestCase
     public function testAddError()
     {
         $sut = new Dfp_Datafeed_Transfer();
+        
+        $passed = false;
+        try {
+        	$sut->addError('error');
+        } catch (Dfp_Datafeed_Transfer_Exception $e) {
+        	$passed = true;
+        }
+        
+        $this->assertTrue($passed, 'Failed to throw exception when adapter is missing');
+        
         $mockAdapter = $this->getMock('Dfp_Datafeed_Transfer_Adapter_Interface');
         $mockAdapter->expects($this->once())->method('addError')->with($this->equalTo('error'));
 
@@ -215,6 +176,16 @@ class Dfp_Datafeed_TransferTest extends PHPUnit_Framework_TestCase
     public function testAddErrors()
     {
         $sut = new Dfp_Datafeed_Transfer();
+        
+        $passed = false;
+        try {
+        	$sut->addErrors(array('error', 'error2'));
+        } catch (Dfp_Datafeed_Transfer_Exception $e) {
+        	$passed = true;
+        }
+        
+        $this->assertTrue($passed, 'Failed to throw exception when adapter is missing');        
+        
         $mockAdapter = $this->getMock('Dfp_Datafeed_Transfer_Adapter_Interface');
         $mockAdapter->expects($this->once())->method('addErrors')->with($this->equalTo(array('error','error2')));
 
@@ -226,6 +197,9 @@ class Dfp_Datafeed_TransferTest extends PHPUnit_Framework_TestCase
     public function testGetErrors()
     {
         $sut = new Dfp_Datafeed_Transfer();
+        
+        $this->assertEmpty($sut->getErrors());
+        
         $mockAdapter = $this->getMock('Dfp_Datafeed_Transfer_Adapter_Interface');
         $mockAdapter->expects($this->once())->method('getErrors')->will($this->returnValue(array('error')));
 
@@ -237,6 +211,9 @@ class Dfp_Datafeed_TransferTest extends PHPUnit_Framework_TestCase
     public function testHasErrors()
     {
         $sut = new Dfp_Datafeed_Transfer();
+        
+        $this->assertFalse($sut->hasErrors());
+        
         $mockAdapter = $this->getMock('Dfp_Datafeed_Transfer_Adapter_Interface');
         $mockAdapter->expects($this->once())->method('hasErrors')->will($this->returnValue(true));
 
@@ -248,6 +225,16 @@ class Dfp_Datafeed_TransferTest extends PHPUnit_Framework_TestCase
     public function testSetErrors()
     {
         $sut = new Dfp_Datafeed_Transfer();
+        
+        $passed = false;
+        try {
+        	$sut->setErrors(array('error','error2'));
+        } catch (Dfp_Datafeed_Transfer_Exception $e) {
+        	$passed = true;
+        }
+        
+        $this->assertTrue($passed, 'Failed to throw exception when adapter is missing');        
+        
         $mockAdapter = $this->getMock('Dfp_Datafeed_Transfer_Adapter_Interface');
         $mockAdapter->expects($this->once())->method('setErrors')->with($this->equalTo(array('error','error2')));
 
