@@ -127,13 +127,10 @@ class Dfp_Datafeed_File_Reader extends Dfp_Datafeed_File_Abstract implements Dfp
     		
     		if (!$valid) {
     			$errors = $this->getRecordValidator()->getErrors();
-    			if (is_array($errors)) {
-    				foreach ($errors AS $error) {
-    					$this->addError(sprintf('Validation error on line %d: %s', $this->_position, $error));
-    				}
-    			} else {
-    				$this->addError(sprintf('Validation error on line %d', $this->_position));
+    			foreach ($errors AS $error) {
+    				$this->addError(sprintf('Validation error on line %d: %s', $this->_position, $error));
     			}
+    			
     		}
     		
     	} while (!$valid);
