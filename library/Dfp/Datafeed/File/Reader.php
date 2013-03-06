@@ -43,6 +43,20 @@ class Dfp_Datafeed_File_Reader extends Dfp_Datafeed_File_Abstract implements Dfp
     protected $_formatNamespace = 'Dfp_Datafeed_File_Reader_Format';
 
     /**
+     * Holds the current position into the feed.
+     *
+     * @var int
+     */
+    protected $_position = 0;
+    
+    /**
+     * Holds the current record from the feed.
+     *
+     * @var array
+     */
+    protected $_currentRecord;
+    
+    /**
     * @see Dfp_Option_Interface::setOptions()
     * @return Dfp_Datafeed_File_Reader
     * @throws Dfp_Datafeed_File_Reader_Exception
@@ -85,76 +99,80 @@ class Dfp_Datafeed_File_Reader extends Dfp_Datafeed_File_Abstract implements Dfp
     {
         $this->_format = $format;
         return $this;
-    }    
-
-    /**
-     * @see Dfp_Datafeed_File_Reader_Interface::getXslt()
-     * @return string
-     */
-    public function getXslt()
-    {
-        $format = $this->getFormat();
-        if (!($format instanceof Dfp_Datafeed_File_Reader_Format_Xml)) {
-            throw new Dfp_Datafeed_File_Reader_Exception('getXslt can only be called when the format is XML');
-        }
-    
-        return $format->getXslt();
     }
     
     /**
-     * @see Dfp_Datafeed_File_Reader_Interface::setXslt()
-     * @return Dfp_Datafeed_File_Reader
-     */
-    public function setXslt($xslt)
-    {
-        $format = $this->getFormat();
-        if (!($format instanceof Dfp_Datafeed_File_Reader_Format_Xml)) {
-            throw new Dfp_Datafeed_File_Reader_Exception('setXslt can only be called when the format is XML');
-        }
-    
-        $format->setXslt($xslt);
-        return $this;
-    }
-    
-	/**
-     * @see Iterator::current()
-     */
-    public function current()
-    {
-        return $this->getFormat()->current();
-    }
-
-	/**
-     * @see Iterator::key()
-     */
-    public function key()
-    {
-        return $this->getFormat()->key();
-    }
-
-	/**
-     * @see Iterator::next()
-     */
-    public function next()
-    {
-        $this->getFormat()->next();
-    }
-
-	/**
      * @see Iterator::rewind()
      */
     public function rewind()
     {
-        $this->getFormat()->rewind();
+    	$this->getFormat()->resetFeed();
+    	$this->_position = 0;
+    	$this->next(); //load first record
     }
-
-	/**
+    
+    /**
+     * @see Iterator::next()
+     */
+    public function next()
+    {
+    	do {
+    		$this->_currentRecord = $this->getFormat()->loadNextRecord();
+    		if (!is_array($this->_currentRecord)) {
+    			return;
+    		}
+    		$this->_position++;
+    		$this->_currentRecord = $this->getRecordFilterer()->filterRecord($this->_currentRecord);
+    		$valid = $this->getRecordValidator()->validateRecord($this->_currentRecord);
+    		
+    		if (!$valid) {
+    			$errors = $this->getRecordValidator()->getErrors();
+    			foreach ($errors AS $error) {
+    				$this->addError(sprintf('Validation error on line %d: %s', $this->_position, $error));
+    			}
+    			
+    		}
+    		
+    	} while (!$valid);
+    	
+    }
+    
+    /**
      * @see Iterator::valid()
      */
     public function valid()
     {
-        return $this->getFormat()->valid();
+    	return (bool) $this->_currentRecord;
     }
-
-
+    
+    /**
+     * @see Iterator::current()
+     */
+    public function current()
+    {
+    	return $this->_currentRecord;
+    }
+    
+    /**
+     * @see Iterator::key()
+     */
+    public function key()
+    {
+    	return $this->_position;
+    } 
+    
+    /**
+     * @param string $method
+     * @param array $args
+     * @throws Dfp_Datafeed_File_Reader_Exception
+     * @return mixed
+     */
+    public function __call($method, $args)
+    {
+    	if (method_exists($this->getFormat(), $method)) {
+    		return call_user_func_array(array($this->getFormat(), $method), $args);
+    	}
+    	
+    	throw new Dfp_Datafeed_File_Reader_Exception(sprintf('Method %s dosn\'t exist in format class', $method));
+    }
 }

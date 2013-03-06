@@ -18,9 +18,6 @@ class Dfp_Datafeed_File_ReaderTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('dialect', $sut->getDialect());
     }
 
-    /**
-     * @todo Implement testSetDialect().
-     */
     public function testSetDialect()
     {
         $sut = new Dfp_Datafeed_File_Reader();
@@ -67,35 +64,8 @@ class Dfp_Datafeed_File_ReaderTest extends PHPUnit_Framework_TestCase
 
         $sut->setLocation('location');
     }
-    /**
-     * @todo Implement testGetXslt().
-     */
-    public function testGetXslt()
-    {
-        $sut = new Dfp_Datafeed_File_Reader();
-        $mockFormat = $this->getMock('Dfp_Datafeed_File_Reader_Format_Xml');
-        $mockFormat->expects($this->once())->method('getXslt')->will($this->returnValue('xslt'));
-        
-        $passed = false;
-        
-        try {
-            $sut->getXslt();
-        } catch (Dfp_Datafeed_File_Reader_Exception $e) {
-            if ($e->getMessage() == 'getXslt can only be called when the format is XML') {
-                $passed = true;
-            }
-        }
-        
-        $sut->setFormat($mockFormat);
-        $this->assertEquals('xslt', $sut->getXslt());
-        $this->assertTrue($passed);
-        
-    }
 
-    /**
-     * @todo Implement testSetXslt().
-     */
-    public function testSetXslt()
+    public function test__call()
     {
         $sut = new Dfp_Datafeed_File_Reader();
         $mockFormat = $this->getMock('Dfp_Datafeed_File_Reader_Format_Xml');
@@ -106,7 +76,7 @@ class Dfp_Datafeed_File_ReaderTest extends PHPUnit_Framework_TestCase
         try {
             $sut->setXslt('xslt');
         } catch (Dfp_Datafeed_File_Reader_Exception $e) {
-            if ($e->getMessage() == 'setXslt can only be called when the format is XML') {
+            if ($e->getMessage() == 'Method setXslt dosn\'t exist in format class') {
                 $passed = true;
             }
         }
@@ -116,18 +86,12 @@ class Dfp_Datafeed_File_ReaderTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($passed);
     }
 
-    /**
-     * @todo Implement testGetFormat().
-     */
     public function testGetFormat()
     {
         $sut = new Dfp_Datafeed_File_Reader();
         $this->assertInstanceOf('Dfp_Datafeed_File_Reader_Format_Csv', $sut->getFormat());
     }
 
-    /**
-     * @todo Implement testGetFormat().
-     */
     public function testSetFormatString()
     {
         $name = 'test' . uniqid();
@@ -155,9 +119,6 @@ class Dfp_Datafeed_File_ReaderTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('test', $sut->getFormatNamespace());
     }    
     
-    /**
-     * @todo Implement testSetFormat().
-     */
     public function testSetFormat()
     {
         $sut = new Dfp_Datafeed_File_Reader();
@@ -168,9 +129,6 @@ class Dfp_Datafeed_File_ReaderTest extends PHPUnit_Framework_TestCase
         $this->assertSame($mockFormat, $sut->getFormat());
     }
 
-    /**
-     * @todo Implement testSetConfig().
-     */
     public function testSetConfig()
     {
         $options = array('location'=>'/var/feed/feed.csv');
@@ -183,9 +141,6 @@ class Dfp_Datafeed_File_ReaderTest extends PHPUnit_Framework_TestCase
         $sut->setConfig($config);
     }
 
-    /**
-     * @todo Implement testSetOptions().
-     */
     public function testSetOptions()
     {
         $options = array('format'=>'csv','dialect'=>'standard');
@@ -250,59 +205,24 @@ class Dfp_Datafeed_File_ReaderTest extends PHPUnit_Framework_TestCase
         $this->fail('Exception not thrown');
     }
     
-    public function testCurrent()
+    public function testItterator()
     {
-        $sut = new Dfp_Datafeed_File_Reader();
-        $mockFormat = $this->getMock('Dfp_Datafeed_File_Reader_Format_Interface');
-        $mockFormat->expects($this->once())->method('current')->will($this->returnValue('current'));
-
-        $sut->setFormat($mockFormat);
-
-        $this->assertEquals('current', $sut->current());
-    }
-
-    public function testKey()
-    {
-        $sut = new Dfp_Datafeed_File_Reader();
-        $mockFormat = $this->getMock('Dfp_Datafeed_File_Reader_Format_Interface');
-        $mockFormat->expects($this->once())->method('key')->will($this->returnValue('key'));
-
-        $sut->setFormat($mockFormat);
-
-        $this->assertEquals('key', $sut->key());
-    }
-
-    public function testNext()
-    {
-        $sut = new Dfp_Datafeed_File_Reader();
-        $mockFormat = $this->getMock('Dfp_Datafeed_File_Reader_Format_Interface');
-        $mockFormat->expects($this->once())->method('next');
-
-        $sut->setFormat($mockFormat);
-
-        $sut->next();
-    }
-
-    public function testRewind()
-    {
-        $sut = new Dfp_Datafeed_File_Reader();
-        $mockFormat = $this->getMock('Dfp_Datafeed_File_Reader_Format_Interface');
-        $mockFormat->expects($this->once())->method('rewind');
-
-        $sut->setFormat($mockFormat);
-
-        $sut->rewind();
-    }
-
-    public function testValid()
-    {
-        $sut = new Dfp_Datafeed_File_Reader();
-        $mockFormat = $this->getMock('Dfp_Datafeed_File_Reader_Format_Interface');
-        $mockFormat->expects($this->once())->method('valid')->will($this->returnValue(true));
-
-        $sut->setFormat($mockFormat);
-
-        $this->assertEquals(true, $sut->valid());
+		$sut = new Dfp_Datafeed_File_Reader();
+		$mockFormat = $this->getMock('Dfp_Datafeed_File_Reader_Format_Interface');
+		$sut->setFormat($mockFormat);
+		$mockFormat->expects($this->atLeastOnce())->method('loadNextRecord')
+                 ->will(
+                     $this->onConsecutiveCalls(
+                         array('a', 'b', 'c'),
+                         array('a', 'b', 'c'),
+                         false
+                     )
+                 );
+		$mockFormat->expects($this->once())->method('resetFeed');
+		foreach ($sut AS $i => $row) {
+			$this->assertEquals(array('a', 'b', 'c'), $row);
+		}
+		
     }
 
     public function testAddError()
@@ -395,4 +315,127 @@ class Dfp_Datafeed_File_ReaderTest extends PHPUnit_Framework_TestCase
             $this->assertEquals($results[$position], $record);
         }
     }
+    
+    public function testNextWithFilter()
+    {
+    	$sut = new Dfp_Datafeed_File_Reader();
+
+    	$mockAdapter = $this->getMock('Dfp_Datafeed_File_Reader_Format_Interface');
+    	$mockAdapter->expects($this->once())
+    				->method('loadNextRecord')
+    				->will($this->returnValue(array('xyz')));
+    
+    	$mockFilterer = $this->getMock('Dfp_Datafeed_File_Record_Filterer');
+    	$mockFilterer->expects($this->once())
+    				 ->method('filterRecord')
+    				 ->with($this->equalTo(array('xyz')))
+    				 ->will($this->returnValue(array('first'=>'abc')));
+    	
+    	$sut->setRecordFilterer($mockFilterer);
+    	$sut->setFormat($mockAdapter);
+    	$sut->next();
+    
+    	$sut = new Dfp_Datafeed_File_Reader();
+    	$mockFilterer = $this->getMock('Dfp_Datafeed_File_Record_Filterer');
+    	$mockFilterer->expects($this->never())
+    		         ->method('filterRecord');
+    	$mockAdapter = $this->getMock('Dfp_Datafeed_File_Reader_Format_Interface');
+    	$mockAdapter->expects($this->once())
+    				->method('loadNextRecord')
+    				->will($this->returnValue(null)); //eg end of file
+    	
+    	$sut->setRecordFilterer($mockFilterer);
+    	$sut->setFormat($mockAdapter);
+    	$sut->next();
+    }
+    
+    public function testGetRecordFilterer()
+    {
+    	$sut = new Dfp_Datafeed_File_Reader();
+    	$this->assertInstanceOf('Dfp_Datafeed_File_Record_Filterer', $sut->getRecordFilterer());
+    }
+    
+    public function testSetRecordFilterer()
+    {
+    	$sut = new Dfp_Datafeed_File_Reader();
+    	$mockFilterer = $this->getMock('Dfp_Datafeed_File_Record_Filterer');
+    	
+    	$sut->setRecordFilterer($mockFilterer);
+    	
+    	$this->assertSame($mockFilterer, $sut->getRecordFilterer());
+    }
+    
+    public function testGetRecordValidator()
+    {
+    	$sut = new Dfp_Datafeed_File_Reader();
+    	$this->assertInstanceOf('Dfp_Datafeed_File_Record_Validator', $sut->getRecordValidator());
+    }
+    
+    public function testSetRecordValidator()
+    {
+    	$sut = new Dfp_Datafeed_File_Reader();
+    	$mockValidator = $this->getMock('Dfp_Datafeed_File_Record_Validator');
+    	 
+    	$sut->setRecordValidator($mockValidator);
+    	 
+    	$this->assertSame($mockValidator, $sut->getRecordValidator());
+    }  
+
+    public function testNextWithValidator()
+    {
+    	$sut = new Dfp_Datafeed_File_Reader();
+    
+    	$mockAdapter = $this->getMock('Dfp_Datafeed_File_Reader_Format_Interface');
+    	$mockAdapter->expects($this->once())
+    	            ->method('loadNextRecord')
+    	            ->will($this->returnValue(array('xyz')));
+    
+    	$mockValidator = $this->getMock('Dfp_Datafeed_File_Record_Validator');
+    	$mockValidator->expects($this->once())
+    	              ->method('validateRecord')
+    	              ->with($this->equalTo(array('xyz')))
+    	              ->will($this->returnValue(true));
+    	 
+    	$sut->setRecordValidator($mockValidator);
+    	$sut->setFormat($mockAdapter);
+    	$sut->next();
+    
+    	$sut = new Dfp_Datafeed_File_Reader();
+    	$mockValidator = $this->getMock('Dfp_Datafeed_File_Record_Validator');
+    	$mockValidator->expects($this->never())
+    	              ->method('validateRecord');
+    	$mockAdapter = $this->getMock('Dfp_Datafeed_File_Reader_Format_Interface');
+    	$mockAdapter->expects($this->once())
+    	            ->method('loadNextRecord')
+    	            ->will($this->returnValue(null)); //eg end of file
+    	 
+    	$sut->setRecordValidator($mockValidator);
+    	$sut->setFormat($mockAdapter);
+    	$sut->next();
+    	
+    	//add test for invalid row
+    	
+    	$mockAdapter = $this->getMock('Dfp_Datafeed_File_Reader_Format_Interface');
+    	$mockAdapter->expects($this->exactly(2))
+    	            ->method('loadNextRecord')
+    	            ->will($this->returnValue(array('xyz')));
+    	
+    	$mockAdapter->expects($this->once())
+    	            ->method('addError')
+    	            ->with($this->equalTo('Validation error on line 1: error'));
+    	
+    	$mockValidator = $this->getMock('Dfp_Datafeed_File_Record_Validator');
+    	$mockValidator->expects($this->exactly(2))
+    	              ->method('validateRecord')
+    	              ->with($this->equalTo(array('xyz')))
+    	              ->will($this->onConsecutiveCalls(false,true));
+    	$mockValidator->expects($this->once())
+    	              ->method('getErrors')
+    	              ->will($this->returnValue(array('error')));
+    	
+    	$sut->setRecordValidator($mockValidator);
+    	$sut->setFormat($mockAdapter);
+    	$sut->next();    	
+    	
+    }    
 }

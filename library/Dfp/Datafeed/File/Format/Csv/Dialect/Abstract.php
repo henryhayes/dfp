@@ -28,6 +28,7 @@
  */
 
 abstract class Dfp_Datafeed_File_Format_Csv_Dialect_Abstract
+	extends Dfp_Datafeed_File_Format_Dialect_Abstract
     implements Dfp_Datafeed_File_Format_Csv_Dialect_Interface
 {
     /**
@@ -50,13 +51,6 @@ abstract class Dfp_Datafeed_File_Format_Csv_Dialect_Abstract
      * @var string
      */
     protected $_escape = '\\';
-
-    /**
-     * The line return character
-     *
-     * @var string
-     */
-    protected $_lineReturn = "\n";
 
     /**
      * True if this dialect has a header, false if not. Important: NULL if not known.
@@ -95,13 +89,5 @@ abstract class Dfp_Datafeed_File_Format_Csv_Dialect_Abstract
     public function hasHeader()
     {
         return $this->_hasHeader;
-    }
-
-    /**
-     * @see Dfp_Datafeed_File_Format_Csv_Dialect_Interface::getLineReturn()
-     */
-    public function getLineReturn()
-    {
-        return $this->_lineReturn;
     }
 }

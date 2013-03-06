@@ -66,29 +66,6 @@ interface Dfp_Datafeed_Transfer_Interface extends Dfp_Error_Interface, Dfp_Optio
     public function retrieveFiles(array $sources, array $destinations=array());
     
     /**
-     * Sets the string name of the adapter to use
-     * 
-     * @param string $adapter
-     * @return Dfp_Datafeed_Transfer_Interface
-     */
-    public function setAdapterString($adapter);
-    
-    /**
-     * Sets the string namespace to use for the adapter
-     * 
-     * @param string $namespace
-     * @return Dfp_Datafeed_Transfer_Interface
-     */
-    public function setAdapterNamespace($namespace);
-    
-    /**
-     * Gets the namespace of the adapter.
-     * 
-     * @return string
-     */
-    public function getAdapterNamespace();
-    
-    /**
      * Sets the adapter directly.
      * 
      * @param Dfp_Datafeed_Transfer_Adapter_Interface $adapter

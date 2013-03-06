@@ -25,9 +25,6 @@ class Dfp_Datafeed_File_Writer_Format_Csv_FileTest extends PHPUnit_Framework_Tes
         $this->assertSame($mockDialect, $sut->getDialect());
     }
 
-    /**
-     * @todo Implement testOpen().
-     */
     public function testOpen()
     {
         $dir = vfsStream::setup('base');

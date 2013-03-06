@@ -7,9 +7,6 @@
  */
 class Dfp_Datafeed_File_Reader_Format_CsvTest extends PHPUnit_Framework_TestCase
 {
-    /**
-     * @todo Implement testGetDialect().
-     */
     public function testGetDialect()
     {
         $mockFile = $this->getMock('Dfp_Datafeed_File_Reader_Format_Csv_File');
@@ -26,9 +23,6 @@ class Dfp_Datafeed_File_Reader_Format_CsvTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(';', $dialect->getDelimiter());
     }
 
-    /**
-     * @todo Implement testSetDialect().
-     */
     public function testSetDialect()
     {
         $mockDialect = $this->getMock('Dfp_Datafeed_File_Format_Csv_Dialect_Interface');
@@ -51,9 +45,6 @@ class Dfp_Datafeed_File_Reader_Format_CsvTest extends PHPUnit_Framework_TestCase
         $this->assertSame($mockFile, $sut->getFile());
     }
 
-    /**
-    * @todo Implement testSetDialectString().
-    */
     public function testSetDialectString()
     {
         $sut = $sut = new Dfp_Datafeed_File_Reader_Format_Csv();
@@ -61,7 +52,6 @@ class Dfp_Datafeed_File_Reader_Format_CsvTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Dfp_Datafeed_File_Format_Csv_Dialect_Tabs', $sut->getDialect());
     }
 
-    //@todo test the errors and error handling.
     public function testItterator()
     {
         $mockFile = $this->getMock('Dfp_Datafeed_File_Reader_Format_Csv_File');
@@ -94,7 +84,9 @@ class Dfp_Datafeed_File_Reader_Format_CsvTest extends PHPUnit_Framework_TestCase
         $sut->setDialect($mockDialect);
 
         $i = 0;
-        foreach ($sut AS $position => $record) {
+        $reader = new Dfp_Datafeed_File_Reader();
+        $reader->setFormat($sut);
+        foreach ($reader AS $position => $record) {
             $this->assertEquals(++$i, $position);
             $this->assertEquals(array('a','b','c'), $record);
         }

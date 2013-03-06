@@ -36,12 +36,6 @@ class Dfp_Datafeed_Transfer implements Dfp_Datafeed_Transfer_Interface
     protected $_adapter;
     
     /**
-     * Namespace for adapter
-     * @var string
-     */
-    protected $_adapterNamespace = 'Dfp_Datafeed_Transfer_Adapter';
-    
-    /**
     * @see Dfp_Option_Interface::__construct()
     */
     public function __construct($options = null)
@@ -61,7 +55,11 @@ class Dfp_Datafeed_Transfer implements Dfp_Datafeed_Transfer_Interface
      */
     public function sendFile($source, $destination=null)
     {
-        $this->getAdapter()->sendFile($source, $destination);
+    	$adapter = $this->getAdapter();
+    	if (!($adapter instanceof Dfp_Datafeed_Transfer_Adapter_Interface)) {
+    		throw new Dfp_Datafeed_Transfer_Exception('Invalid adapter specified');
+    	}
+        $adapter->sendFile($source, $destination);
         return $this;
     }
     
@@ -83,7 +81,11 @@ class Dfp_Datafeed_Transfer implements Dfp_Datafeed_Transfer_Interface
      */
     public function retrieveFile($source, $destination=null)
     {
-        $this->getAdapter()->retrieveFile($source, $destination);
+    	$adapter = $this->getAdapter();
+    	if (!($adapter instanceof Dfp_Datafeed_Transfer_Adapter_Interface)) {
+    		throw new Dfp_Datafeed_Transfer_Exception('Invalid adapter specified');
+    	}
+        $adapter->retrieveFile($source, $destination);
         return $this;
     }
     
@@ -108,52 +110,14 @@ class Dfp_Datafeed_Transfer implements Dfp_Datafeed_Transfer_Interface
         $this->_adapter = $adapter;
         return $this;
     }
-
-    /**
-     * @see Dfp_Datafeed_Transfer_Interface::setAdapterString()
-     * @return Dfp_Datafeed_Transfer
-     */
-    public function setAdapterString($adapter)
-    {
-        $this->_adapter = $adapter;
-        return $this;
-    }
-    
-    /**
-     * @see Dfp_Datafeed_Transfer_Interface::setAdapterNamespace()
-     * @return Dfp_Datafeed_Transfer
-     */
-    public function setAdapterNamespace($namespace)
-    {
-        $this->_adapterNamespace = $namespace;
-        return $this;
-    }
-    
-    /**
-     * @see Dfp_Datafeed_Transfer_Interface::getAdapterNamespace()
-     */
-    public function getAdapterNamespace()
-    {
-        return $this->_adapterNamespace;
-    }    
     
    /**
     * @see Dfp_Datafeed_Transfer_Interface::getAdapter()
     */
     public function getAdapter()
     {
-        if (!($this->_adapter instanceof Dfp_Datafeed_Transfer_Adapter_Interface)) {
-            if (is_null($this->_adapter)) {
-                throw new Dfp_Datafeed_Transfer_Exception('Invalid Adapter Specified');
-            }
-            $class = $this->getAdapterNamespace() . '_' . $this->_adapter;
-            
-            $this->_adapter = new $class();
-        }
-        
         return $this->_adapter;
     }
-    
     
     /**
      * @see Dfp_Option_Interface::setOptions()
@@ -164,23 +128,11 @@ class Dfp_Datafeed_Transfer implements Dfp_Datafeed_Transfer_Interface
         if (isset($options['adapter'])) {
             if ($options['adapter'] instanceof Dfp_Datafeed_Transfer_Adapter_Interface) {
                 $this->setAdapter($options['adapter']);
-            } elseif (is_string($options['adapter'])) {
-                $this->setAdapterString($options['adapter']);
             } else {
-                throw new Dfp_Datafeed_Transfer_Exception('Invalid adapter specified');
+            	$this->setAdapter(Dfp_Datafeed_Transfer_Adapter_Abstract::factory($options['adapter']));
             }
             unset($options['adapter']);
         }
-        if (isset($options['adapterNamespace'])) {
-            if (is_string($options['adapterNamespace'])) {
-                $this->setAdapterNamespace($options['adapterNamespace']);
-            } else {
-                throw new Dfp_Datafeed_Transfer_Exception('Invalid adapter namespace specified');
-            }
-            unset($options['adapterNamespace']);
-        }        
-        
-        $this->getAdapter()->setOptions($options);
         
         return $this;
     }
@@ -201,7 +153,11 @@ class Dfp_Datafeed_Transfer implements Dfp_Datafeed_Transfer_Interface
      */
     public function addError($message)
     {
-        $this->getAdapter()->addError($message);
+    	$adapter = $this->getAdapter();
+    	if (!($adapter instanceof Dfp_Datafeed_Transfer_Adapter_Interface)) {
+    		throw new Dfp_Datafeed_Transfer_Exception('Invalid adapter specified');
+    	}
+        $adapter->addError($message);
         return $this;
     }
     
@@ -211,7 +167,11 @@ class Dfp_Datafeed_Transfer implements Dfp_Datafeed_Transfer_Interface
      */
     public function addErrors(array $messages)
     {
-        $this->getAdapter()->addErrors($messages);
+    	$adapter = $this->getAdapter();
+    	if (!($adapter instanceof Dfp_Datafeed_Transfer_Adapter_Interface)) {
+    		throw new Dfp_Datafeed_Transfer_Exception('Invalid adapter specified');
+    	}
+        $adapter->addErrors($messages);
         return $this;
     }
     
@@ -221,7 +181,11 @@ class Dfp_Datafeed_Transfer implements Dfp_Datafeed_Transfer_Interface
      */
     public function getErrors()
     {
-        return $this->getAdapter()->getErrors();
+    	$adapter = $this->getAdapter();
+    	if (!($adapter instanceof Dfp_Datafeed_Transfer_Adapter_Interface)) {
+    		return array();
+    	}
+        return $adapter->getErrors();
     }
     
     /**
@@ -230,7 +194,11 @@ class Dfp_Datafeed_Transfer implements Dfp_Datafeed_Transfer_Interface
      */
     public function hasErrors()
     {
-        return $this->getAdapter()->hasErrors();
+    	$adapter = $this->getAdapter();
+    	if (!($adapter instanceof Dfp_Datafeed_Transfer_Adapter_Interface)) {
+    		return false;
+    	}    	
+        return $adapter->hasErrors();
     }
     
     /**
@@ -239,7 +207,11 @@ class Dfp_Datafeed_Transfer implements Dfp_Datafeed_Transfer_Interface
      */
     public function setErrors(array $messages)
     {
-        $this->getAdapter()->setErrors($messages);
+    	$adapter = $this->getAdapter();
+    	if (!($adapter instanceof Dfp_Datafeed_Transfer_Adapter_Interface)) {
+    		throw new Dfp_Datafeed_Transfer_Exception('Invalid adapter specified');
+    	}
+        $adapter->setErrors($messages);
         return $this;
     }
 }

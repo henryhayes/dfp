@@ -26,7 +26,18 @@
  * @author      Chris Riley <chris.riley@imhotek.net>
  * @since       2011-12-07
  */
-interface Dfp_Datafeed_File_Reader_Format_Interface extends Dfp_Datafeed_File_Format_Interface, Iterator
+interface Dfp_Datafeed_File_Reader_Format_Interface extends Dfp_Datafeed_File_Format_Interface
 {
-
+	/**
+	 * Loads the next record from the file and returns it
+	 * 
+	 * @return array
+	 */
+	public function loadNextRecord();
+	
+	/**
+	 * Resets the feed back to the beginning of the file. 
+	 */
+	public function resetFeed();
+	
 }

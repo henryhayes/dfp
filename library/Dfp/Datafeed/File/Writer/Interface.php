@@ -43,22 +43,6 @@ interface Dfp_Datafeed_File_Writer_Interface extends Dfp_Datafeed_File_Interface
     public function setFormat(Dfp_Datafeed_File_Writer_Format_Interface $format);
 
     /**
-     * Getter for Xslt location
-     *
-     * @throws Dfp_Datafeed_File_Writer_Exception if format type isn't XML.
-     * @return string
-     */
-    public function getXslt();
-
-    /**
-     * Setter for Xslt location
-     *
-     * @throws Dfp_Datafeed_File_Writer_Exception if format type isn't XML.
-     * @param string $xslt
-     */
-    public function setXslt($xslt);
-    
-    /**
      * Writes a record to the file. Array keys are used for the header, if the dialect specifies a header. 
      * If the dialect specifies header as null, a header row will only be written if the array keys are strings.
      * 

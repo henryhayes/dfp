@@ -199,7 +199,7 @@ class Dfp_Datafeed_File_Reader_Format_Ascii extends Dfp_Datafeed_File_Reader_For
 
         // Skip rows?
         $skipRows = $this->getDialect()->getSkipLines();
-        if ($this->key() == 0 && $skipRows > 0) {
+        if ($this->_position == 0 && $skipRows > 0) {
             for ($r = 0; $r<count($skipRows); $r++) {
                 $row = $this->getFgets();
             }
