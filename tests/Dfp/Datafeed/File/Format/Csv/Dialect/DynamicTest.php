@@ -71,35 +71,36 @@ class Dfp_Datafeed_File_Format_Csv_Dialect_DynamicTest extends PHPUnit_Framework
     public function testSetDelimiter()
     {
         $sut = new Dfp_Datafeed_File_Format_Csv_Dialect_Dynamic();
-        $sut->setDelimiter('d');
+        $this->assertInstanceOf('Dfp_Datafeed_File_Format_Csv_Dialect_Dynamic', $sut->setDelimiter('d'));
         $this->assertEquals('d', $sut->getDelimiter());
     }
 
     public function testSetQuote()
     {
-        $sut = new Dfp_Datafeed_File_Format_Csv_Dialect_Dynamic();
-        $sut->setQuote('d');
-        $this->assertEquals('d', $sut->getQuote());
+        $dynamic = new Dfp_Datafeed_File_Format_Csv_Dialect_Dynamic();
+
+        $this->assertInstanceOf('Dfp_Datafeed_File_Format_Csv_Dialect_Dynamic', $dynamic->setQuote('Test'));
+        $this->assertEquals('Test', $dynamic->getQuote());
     }
 
     public function testSetEscape()
     {
         $sut = new Dfp_Datafeed_File_Format_Csv_Dialect_Dynamic();
-        $sut->setEscape('d');
-        $this->assertEquals('d', $sut->getEscape());
+        $this->assertInstanceOf('Dfp_Datafeed_File_Format_Csv_Dialect_Dynamic', $sut->setEscape('esc'));
+        $this->assertEquals('esc', $sut->getEscape());
     }
 
     public function testSetHasHeader()
     {
         $sut = new Dfp_Datafeed_File_Format_Csv_Dialect_Dynamic();
-        $sut->setHasHeader(false);
+        $this->assertInstanceOf('Dfp_Datafeed_File_Format_Csv_Dialect_Dynamic', $sut->setHasHeader(false));
         $this->assertEquals(false, $sut->hasHeader());
     }
 
     public function testSetLineReturn()
     {
         $sut = new Dfp_Datafeed_File_Format_Csv_Dialect_Dynamic();
-        $sut->setLineReturn('OTHER');
+        $this->assertInstanceOf('Dfp_Datafeed_File_Format_Csv_Dialect_Dynamic', $sut->setLineReturn('OTHER'));
         $this->assertEquals('OTHER', $sut->getLineReturn());
     }
 }

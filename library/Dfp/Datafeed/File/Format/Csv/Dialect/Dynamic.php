@@ -95,6 +95,7 @@ class Dfp_Datafeed_File_Format_Csv_Dialect_Dynamic
     public function setQuote($quote)
     {
         $this->_quote = $quote;
+        return $this;
     }
 
 	/**
