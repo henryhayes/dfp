@@ -29,7 +29,7 @@
 
 define('BASE_PATH', dirname(dirname(realpath(__FILE__))));
 define('LIBRARY_PATH', BASE_PATH . DIRECTORY_SEPARATOR . 'library');
-set_include_path(implode(PATH_SEPARATOR, array(get_include_path(), LIBRARY_PATH)));
+set_include_path(implode(PATH_SEPARATOR, array(LIBRARY_PATH, get_include_path())));
 
 require_once('Zend/Loader/Autoloader.php');
 $autoloader = Zend_Loader_Autoloader::getInstance();
