@@ -28,10 +28,5 @@
  */
 interface Dfp_Datafeed_File_Format_Dialect_Interface
 {
-    /**
-     * Returns the line return character
-     *
-     * @return string
-     */
-    public function getLineReturn();
+    //
 }
