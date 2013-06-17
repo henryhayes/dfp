@@ -11,26 +11,26 @@
  *
  * @category    Dfp
  * @package     Datafeed
- * @subpackage  File_Reader_Format_Ascii
+ * @subpackage  File_Format_FixedWidth_Dialect_Positional
  * @copyright   Copyright (c) 2012 PHP Datafeed Library
- * @version     $Id: Ascii.php 146 2012-07-20 10:41:15Z t.carnage@gmail.com $
  * @since       2012-07-03
  */
 /**
- * @see Dfp_Datafeed_File_Reader_Format_FixedWidth
+ * @see Dfp_Datafeed_File_Format_FixedWidth_Dialect_Positional
  */
-require_once realpath(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'FixedWidth.php';
+require_once dirname(dirname(dirname(realpath(__FILE__)))) . '/FixedWidth/Dialect/Positional.php';
 /**
- * Dfp_Datafeed_File_Reader_Format_Ascii class.
+ * Dfp_Datafeed_File_Format_FixedWidth_Dialect_Positional class.
  *
  * @category    Dfp
  * @package     Datafeed
- * @subpackage  File_Reader_Format_Ascii
+ * @subpackage  File_Format_FixedWidth_Dialect_Positional
  * @copyright   Copyright (c) 2012 PHP Datafeed Library
  * @author      Henry Hayes <mail@henryhayes.co.uk>
  * @since       2012-07-03
  */
-class Dfp_Datafeed_File_Reader_Format_Ascii extends Dfp_Datafeed_File_Reader_Format_FixedWidth
+class Dfp_Datafeed_File_Format_Ascii_Dialect_Positional
+    extends Dfp_Datafeed_File_Format_FixedWidth_Dialect_Positional
 {
     //
 }

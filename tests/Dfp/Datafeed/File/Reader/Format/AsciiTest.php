@@ -3,20 +3,20 @@
 include_once 'vfsStream/vfsStream.php';
 
 /**
- * Test class for Dfp_Datafeed_File_Reader_Format_Ascii.
+ * Test class for Dfp_Datafeed_File_Reader_Format_FixedWidth.
  */
-class Dfp_Datafeed_File_Reader_Format_AsciiTest extends PHPUnit_Framework_TestCase
+class Dfp_Datafeed_File_Reader_Format_FixedWidthTest extends PHPUnit_Framework_TestCase
 {
     /**
      * Tests getDialect()
      */
     public function testGetDialect()
     {
-        $mockFile = $this->getMock('Dfp_Datafeed_File_Format_Ascii_Dialect_Positional');
-        $sut = new Dfp_Datafeed_File_Reader_Format_Ascii();
+        $mockFile = $this->getMock('Dfp_Datafeed_File_Format_FixedWidth_Dialect_Positional');
+        $sut = new Dfp_Datafeed_File_Reader_Format_FixedWidth();
 
         $dialect = $sut->getDialect();
-        $this->assertInstanceOf('Dfp_Datafeed_File_Format_Ascii_Dialect_Positional', $dialect);
+        $this->assertInstanceOf('Dfp_Datafeed_File_Format_FixedWidth_Dialect_Positional', $dialect);
 
         $this->assertEquals(array(), $dialect->getPositionalInfo());
     }
@@ -26,8 +26,8 @@ class Dfp_Datafeed_File_Reader_Format_AsciiTest extends PHPUnit_Framework_TestCa
      */
     public function testSetDialect()
     {
-        $mockDialect = $this->getMock('Dfp_Datafeed_File_Format_Ascii_Dialect_Interface');
-        $sut = new Dfp_Datafeed_File_Reader_Format_Ascii();
+        $mockDialect = $this->getMock('Dfp_Datafeed_File_Format_FixedWidth_Dialect_Interface');
+        $sut = new Dfp_Datafeed_File_Reader_Format_FixedWidth();
         $sut->setDialect($mockDialect);
         $this->assertSame($mockDialect, $sut->getDialect());
     }
@@ -37,9 +37,9 @@ class Dfp_Datafeed_File_Reader_Format_AsciiTest extends PHPUnit_Framework_TestCa
     */
     public function testSetDialectString()
     {
-        $sut = $sut = new Dfp_Datafeed_File_Reader_Format_Ascii();
+        $sut = $sut = new Dfp_Datafeed_File_Reader_Format_FixedWidth();
         $sut->setDialectString('positional');
-        $this->assertInstanceOf('Dfp_Datafeed_File_Format_Ascii_Dialect_Positional', $sut->getDialect());
+        $this->assertInstanceOf('Dfp_Datafeed_File_Format_FixedWidth_Dialect_Positional', $sut->getDialect());
     }
 
     /**
@@ -68,10 +68,10 @@ class Dfp_Datafeed_File_Reader_Format_AsciiTest extends PHPUnit_Framework_TestCa
         $sut->setDialect($dialect);
 
         $data = array();
-        
+
         $reader = new Dfp_Datafeed_File_Reader();
         $reader->setFormat($sut);
-        
+
         foreach ($reader as $record) {
             $data[] = $record;
         }
@@ -195,13 +195,13 @@ class Dfp_Datafeed_File_Reader_Format_AsciiTest extends PHPUnit_Framework_TestCa
 
         $c = new Zend_Config($params);
 
-        $sut = new Dfp_Datafeed_File_Reader_Format_Ascii($params);
+        $sut = new Dfp_Datafeed_File_Reader_Format_FixedWidth($params);
         $this->assertEquals('test.csv', $sut->getLocation());
-        $sut = new Dfp_Datafeed_File_Reader_Format_Ascii($c);
+        $sut = new Dfp_Datafeed_File_Reader_Format_FixedWidth($c);
         $this->assertEquals('test.csv', $sut->getLocation());
 
         try {
-            $sut = new Dfp_Datafeed_File_Reader_Format_Ascii('string');
+            $sut = new Dfp_Datafeed_File_Reader_Format_FixedWidth('string');
         } catch (Dfp_Datafeed_File_Exception $e) {
             if ($e->getMessage() == 'Invalid parameter to constructor') {
                 return;
@@ -213,7 +213,7 @@ class Dfp_Datafeed_File_Reader_Format_AsciiTest extends PHPUnit_Framework_TestCa
 
     public function testSetDialectNamespace()
     {
-        $sut = new Dfp_Datafeed_File_Reader_Format_Ascii();
+        $sut = new Dfp_Datafeed_File_Reader_Format_FixedWidth();
         $sut->setDialectNamespace('test');
         $this->assertEquals('test', $sut->getDialectNamespace());
     }

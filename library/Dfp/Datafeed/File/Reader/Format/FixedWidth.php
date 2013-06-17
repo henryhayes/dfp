@@ -11,22 +11,21 @@
  *
  * @category    Dfp
  * @package     Datafeed
- * @subpackage  File_Reader_Format_Ascii
+ * @subpackage  File_Reader_Format_FixedWidth
  * @copyright   Copyright (c) 2012 PHP Datafeed Library
- * @version     $Id: Ascii.php 146 2012-07-20 10:41:15Z t.carnage@gmail.com $
  * @since       2012-07-03
  */
 /**
- * Dfp_Datafeed_File_Reader_Format_Ascii class.
+ * Dfp_Datafeed_File_Reader_Format_FixedWidth class.
  *
  * @category    Dfp
  * @package     Datafeed
- * @subpackage  File_Reader_Format_Ascii
+ * @subpackage  File_Reader_Format_FixedWidth
  * @copyright   Copyright (c) 2012 PHP Datafeed Library
  * @author      Henry Hayes <mail@henryhayes.co.uk>
  * @since       2012-07-03
  */
-class Dfp_Datafeed_File_Reader_Format_Ascii extends Dfp_Datafeed_File_Reader_Format_Abstract
+class Dfp_Datafeed_File_Reader_Format_FixedWidth extends Dfp_Datafeed_File_Reader_Format_Abstract
 {
     /**
      * Contains a count of current record.
@@ -47,7 +46,7 @@ class Dfp_Datafeed_File_Reader_Format_Ascii extends Dfp_Datafeed_File_Reader_For
      *
      * @var string
      */
-    protected $_dialectNamespace = 'Dfp_Datafeed_File_Format_Ascii_Dialect';
+    protected $_dialectNamespace = 'Dfp_Datafeed_File_Format_FixedWidth_Dialect';
 
     /**
      * Holds the unpack format
@@ -98,15 +97,15 @@ class Dfp_Datafeed_File_Reader_Format_Ascii extends Dfp_Datafeed_File_Reader_For
     }
 
     /**
-     * Returns an object of type Dfp_Datafeed_File_Format_Ascii_Dialect_Interface
-     * by default returns Dfp_Datafeed_File_Format_Ascii_Dialect_Positional
+     * Returns an object of type Dfp_Datafeed_File_Format_FixedWidth_Dialect_Interface
+     * by default returns Dfp_Datafeed_File_Format_FixedWidth_Dialect_Positional
      *
      * @see Dfp_Datafeed_File_Reader_Format_Interface::getDialect()
-     * @return Dfp_Datafeed_File_Format_Ascii_Dialect_Positional
+     * @return Dfp_Datafeed_File_Format_FixedWidth_Dialect_Positional
      */
     public function getDialect()
     {
-        if (!($this->_dialect instanceof Dfp_Datafeed_File_Format_Ascii_Dialect_Interface)) {
+        if (!($this->_dialect instanceof Dfp_Datafeed_File_Format_FixedWidth_Dialect_Interface)) {
             if (is_null($this->_dialect)) {
                 $this->_dialect = 'Positional';
             }
@@ -123,8 +122,8 @@ class Dfp_Datafeed_File_Reader_Format_Ascii extends Dfp_Datafeed_File_Reader_For
 
     /**
      *
-     * @param Dfp_Datafeed_File_Format_Ascii_Dialect_Interface $dialect
-     * @return Dfp_Datafeed_File_Reader_Format_Ascii Fluent Interface
+     * @param Dfp_Datafeed_File_Format_FixedWidth_Dialect_Interface $dialect
+     * @return Dfp_Datafeed_File_Reader_Format_FixedWidth Fluent Interface
      */
     public function setDialect(Dfp_Datafeed_File_Format_Dialect_Interface $dialect)
     {
