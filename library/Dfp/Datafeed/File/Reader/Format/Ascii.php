@@ -11,22 +11,22 @@
  *
  * @category    Dfp
  * @package     Datafeed
- * @subpackage  File_Format_Ascii_Dialect_Interface
+ * @subpackage  File_Reader_Format_Ascii
  * @copyright   Copyright (c) 2012 PHP Datafeed Library
- * @version     $Id: Interface.php 122 2012-07-03 21:15:30Z mail@henryhayes.co.uk $
+ * @version     $Id: Ascii.php 146 2012-07-20 10:41:15Z t.carnage@gmail.com $
  * @since       2012-07-03
  */
 /**
- * Dfp_Datafeed_File_Format_Ascii_Dialect_Interface interface.
+ * Dfp_Datafeed_File_Reader_Format_Ascii class.
  *
  * @category    Dfp
  * @package     Datafeed
- * @subpackage  File_Format_Ascii_Dialect_Interface
+ * @subpackage  File_Reader_Format_Ascii
  * @copyright   Copyright (c) 2012 PHP Datafeed Library
  * @author      Henry Hayes <mail@henryhayes.co.uk>
  * @since       2012-07-03
  */
-interface Dfp_Datafeed_File_Format_Ascii_Dialect_Interface
-    extends Dfp_Datafeed_File_Format_Dialect_Interface
+class Dfp_Datafeed_File_Reader_Format_Ascii extends Dfp_Datafeed_File_Reader_Format_Abstract
 {
+    //
 }

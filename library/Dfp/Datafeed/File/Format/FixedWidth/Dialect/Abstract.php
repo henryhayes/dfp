@@ -11,25 +11,24 @@
  *
  * @category    Dfp
  * @package     Datafeed
- * @subpackage  File_Format_Ascii_Dialect_Abstract
+ * @subpackage  File_Format_FixedWidth_Dialect_Abstract
  * @copyright   Copyright (c) 2012 PHP Datafeed Library
- * @version     $Id: Abstract.php 129 2012-07-04 15:44:34Z mail@henryhayes.co.uk $
  * @since       2012-07-03
  */
 /**
- * Dfp_Datafeed_File_Format_Ascii_Dialect_Abstract class.
+ * Dfp_Datafeed_File_Format_FixedWidth_Dialect_Abstract class.
  *
  * @category    Dfp
  * @package     Datafeed
- * @subpackage  File_Format_Ascii_Dialect_Abstract
+ * @subpackage  File_Format_FixedWidth_Dialect_Abstract
  * @copyright   Copyright (c) 2012 PHP Datafeed Library
  * @author      Henry Hayes <mail@henryhayes.co.uk>
  * @since       2012-07-03
  */
 
-abstract class Dfp_Datafeed_File_Format_Ascii_Dialect_Abstract
+abstract class Dfp_Datafeed_File_Format_FixedWidth_Dialect_Abstract
 	extends Dfp_Datafeed_File_Format_Dialect_Abstract
-    implements Dfp_Datafeed_File_Format_Ascii_Dialect_Interface
+    implements Dfp_Datafeed_File_Format_FixedWidth_Dialect_Interface
 {
     /**
      * Contains the amount of lines to skip.

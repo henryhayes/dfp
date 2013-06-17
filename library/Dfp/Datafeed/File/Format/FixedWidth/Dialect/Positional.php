@@ -11,23 +11,22 @@
  *
  * @category    Dfp
  * @package     Datafeed
- * @subpackage  File_Format_Ascii_Dialect_Positional
+ * @subpackage  File_Format_FixedWidth_Dialect_Positional
  * @copyright   Copyright (c) 2012 PHP Datafeed Library
- * @version     $Id: Positional.php 123 2012-07-04 10:13:23Z mail@henryhayes.co.uk $
  * @since       2012-07-03
  */
 /**
- * Dfp_Datafeed_File_Format_Ascii_Dialect_Positional class.
+ * Dfp_Datafeed_File_Format_FixedWidth_Dialect_Positional class.
  *
  * @category    Dfp
  * @package     Datafeed
- * @subpackage  File_Format_Ascii_Dialect_Positional
+ * @subpackage  File_Format_FixedWidth_Dialect_Positional
  * @copyright   Copyright (c) 2012 PHP Datafeed Library
  * @author      Henry Hayes <mail@henryhayes.co.uk>
  * @since       2012-07-03
  */
-class Dfp_Datafeed_File_Format_Ascii_Dialect_Positional
-    extends Dfp_Datafeed_File_Format_Ascii_Dialect_Abstract
+class Dfp_Datafeed_File_Format_FixedWidth_Dialect_Positional
+    extends Dfp_Datafeed_File_Format_FixedWidth_Dialect_Abstract
 {
     /**
      * Contains an array of data for the positional data.
@@ -46,7 +45,7 @@ class Dfp_Datafeed_File_Format_Ascii_Dialect_Positional
      * Sets the positional information.
      *
      * @param array $info
-     * @return Dfp_Datafeed_File_Format_Ascii_Dialect_Positional
+     * @return Dfp_Datafeed_File_Format_FixedWidth_Dialect_Positional
      */
     public function setPositionalInfo(array $info)
     {
