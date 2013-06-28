@@ -219,6 +219,8 @@ class Dfp_Datafeed_File_Reader_Format_FixedWidth extends Dfp_Datafeed_File_Reade
 
         unset($array[1]); //remove the dropped characters from the record
         $this->_currentRecord = array_map('trim', $array);
+
+        $this->_position++;
     }
 
     /**

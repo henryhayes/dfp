@@ -51,7 +51,8 @@ class Dfp_Datafeed_File_Reader_Format_FixedWidthTest extends PHPUnit_Framework_T
      * @param string $fileContents
      * @param array $dataExpected
      */
-    public function testProcessor(array $positionalInfo, $fileContents, array $dataExpected, array $errors)
+    public function testProcessor(
+        array $positionalInfo, $fileContents, array $dataExpected, array $errors, $skipLines = 0)
     {
         $dir = vfsStream::setup('base');
         file_put_contents(vfsStream::url('base/test.csv'), $fileContents);
@@ -63,6 +64,7 @@ class Dfp_Datafeed_File_Reader_Format_FixedWidthTest extends PHPUnit_Framework_T
 
         $dialect = new Dfp_Datafeed_File_Format_Ascii_Dialect_Positional();
         $dialect->setPositionalInfo($positionalInfo);
+        $dialect->setSkipLines($skipLines);
 
         $sut = new Dfp_Datafeed_File_Reader_Format_Ascii($params);
         $sut->setDialect($dialect);
@@ -96,7 +98,8 @@ class Dfp_Datafeed_File_Reader_Format_FixedWidthTest extends PHPUnit_Framework_T
                     1 => array('header_1' => 'AB2', 'header_2' => 'AS11', 'header_3' => '7891'),
                     2 => array('header_1' => 'AB2', 'header_2' => 'BS', 'header_3' => '7891'),
                 ),
-                array()
+                array(),
+                0
             ),
             // Cap ascii example
             array(
@@ -136,7 +139,8 @@ class Dfp_Datafeed_File_Reader_Format_FixedWidthTest extends PHPUnit_Framework_T
                 array(
                     0 => 'Line 1 is incorrect',
                     1 => 'Line 3 is incorrect',
-                )
+                ),
+                0
             ),
             //unpack filtering length
             array(
@@ -151,7 +155,8 @@ class Dfp_Datafeed_File_Reader_Format_FixedWidthTest extends PHPUnit_Framework_T
                     1 => array('header_1' => 'AB2', 'header_2' => 'AS', 'header_3' => '7891'),
                     2 => array('header_1' => 'AB2', 'header_2' => 'BS', 'header_3' => '7891'),
                 ),
-                array()
+                array(),
+                0
             ),
             //unpack filtering length, not using whole record
             array(
@@ -164,13 +169,60 @@ class Dfp_Datafeed_File_Reader_Format_FixedWidthTest extends PHPUnit_Framework_T
                 "AB2AS 1 7891hdjf ajsdhk ajfhksdj sjfhks\r\n",
                 array(
                     0 => array(
-                    	'header_1' => 'AB2',
-                    	'header_2' => 'AS 1 78',
-                    	'header_3' => '91hdjf ajs',
-                    	'header_4'=>'dhk ajfhks'
-                	),
+                        'header_1' => 'AB2',
+                        'header_2' => 'AS 1 78',
+                        'header_3' => '91hdjf ajs',
+                        'header_4'=>'dhk ajfhks'
+                    ),
                 ),
-                array()
+                array(),
+                0
+            ),
+            //skip first line
+            array(
+                array(
+                    'header_1' => array('offset' => 1, 'length' => 3),
+                    'header_2' => array('offset' => 4, 'length' => 7),
+                    'header_3' => array('offset' => 11, 'length' => 10),
+                    'header_4' => array('offset' => 21, 'length' => 20),
+                ),
+                "AB1AS 1 7891hdjf ajsdhk ajfhksdj sjfhk1\r\nAB2AS 1 7891hdjf ajsdhk ajfhksdj sjfhk2\r\n" .
+                "AB3AS 1 7891hdjf ajsdhk ajfhksdj sjfhk3\r\nAB4AS 1 7891hdjf ajsdhk ajfhksdj sjfhk4\r\n" .
+                "AB5AS 1 7891hdjf ajsdhk ajfhksdj sjfhk5\r\nAB6AS 1 7891hdjf ajsdhk ajfhksdj sjfhk6\r\n",
+                array(
+                    0 => array(
+                        'header_1' => 'AB2',
+                        'header_2' => 'AS 1 78',
+                        'header_3' => '91hdjf ajs',
+                        'header_4'=>'dhk ajfhksdj sjfhk2'
+                    ),
+                    1 => array(
+                        'header_1' => 'AB3',
+                        'header_2' => 'AS 1 78',
+                        'header_3' => '91hdjf ajs',
+                        'header_4'=>'dhk ajfhksdj sjfhk3'
+                    ),
+                    2 => array(
+                        'header_1' => 'AB4',
+                        'header_2' => 'AS 1 78',
+                        'header_3' => '91hdjf ajs',
+                        'header_4'=>'dhk ajfhksdj sjfhk4'
+                    ),
+                    3 => array(
+                        'header_1' => 'AB5',
+                        'header_2' => 'AS 1 78',
+                        'header_3' => '91hdjf ajs',
+                        'header_4'=>'dhk ajfhksdj sjfhk5'
+                    ),
+                    4 => array(
+                        'header_1' => 'AB6',
+                        'header_2' => 'AS 1 78',
+                        'header_3' => '91hdjf ajs',
+                        'header_4'=>'dhk ajfhksdj sjfhk6'
+                    ),
+                ),
+                array(),
+                1
             ),
             //not enough characters to unpack
             array(
@@ -182,7 +234,8 @@ class Dfp_Datafeed_File_Reader_Format_FixedWidthTest extends PHPUnit_Framework_T
                 "AB2AS 1 7891\r\n",
                 array(
                 ),
-                array(0 => 'Line 1 is incorrect')
+                array(0 => 'Line 1 is incorrect'),
+                0
             ),
         );
     }
