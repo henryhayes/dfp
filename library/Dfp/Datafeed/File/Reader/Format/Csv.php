@@ -146,6 +146,7 @@ class Dfp_Datafeed_File_Reader_Format_Csv extends Dfp_Datafeed_File_Reader_Forma
         $record = $this->getFile()->getRecord();
 
         if ($record === false && $this->getFile()->isEof()) {
+            $this->getFile()->close();
             $this->_currentRecord = null;
             return;
         }
