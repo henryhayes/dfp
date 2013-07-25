@@ -146,6 +146,7 @@ class Dfp_Datafeed_File_Reader_Format_Csv_File
     public function close()
     {
         fclose($this->_filePointer);
+        $this->_filePointer = null;
         return $this;
     }
 
