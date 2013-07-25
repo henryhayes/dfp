@@ -160,6 +160,10 @@ class Dfp_Datafeed_File_Reader_Format_Csv extends Dfp_Datafeed_File_Reader_Forma
             $this->addError('Empty row on line: ' . $this->_records);
             $this->_loadNextRecord();
             return;
+        } elseif (count($this->_header) != count($record)) {
+            $this->addError('Header row and record mismatch on line: ' . $this->_records);
+            $this->_loadNextRecord();
+            return;
         }
 
         $this->_currentRecord = array_combine($this->_header, $record);
