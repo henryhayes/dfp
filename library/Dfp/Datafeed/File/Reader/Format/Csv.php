@@ -146,6 +146,7 @@ class Dfp_Datafeed_File_Reader_Format_Csv extends Dfp_Datafeed_File_Reader_Forma
         $record = $this->getFile()->getRecord();
 
         if ($record === false && $this->getFile()->isEof()) {
+            $this->getFile()->close();
             $this->_currentRecord = null;
             return;
         }
@@ -158,6 +159,10 @@ class Dfp_Datafeed_File_Reader_Format_Csv extends Dfp_Datafeed_File_Reader_Forma
             return;
         } elseif (count($record) == 1 && is_null($record[0])) {
             $this->addError('Empty row on line: ' . $this->_records);
+            $this->_loadNextRecord();
+            return;
+        } elseif (count($this->_header) != count($record)) {
+            $this->addError('Header row and record mismatch on line: ' . $this->_records);
             $this->_loadNextRecord();
             return;
         }

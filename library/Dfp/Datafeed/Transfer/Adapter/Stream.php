@@ -262,33 +262,32 @@ class Dfp_Datafeed_Transfer_Adapter_Stream extends Dfp_Datafeed_Transfer_Adapter
     }
 
     /**
-     * Copys a file from source to destination
-     *
-     * @param string $sourceUri
-     * @param string $destUri
-     */
-    protected function _copyFile($sourceUri, $destUri)
-    {
-        $sourceH = fopen($sourceUri, 'rb');
-        $destH = fopen($destUri, 'wb');
-
-        stream_copy_to_stream($sourceH, $destH);
-    }
-
-    /**
      * @see Dfp_Datafeed_Transfer_Adapter_Interface::sendFile()
      */
     public function sendFile($source, $destination=null)
     {
         $sourceUri = $this->getBasePath() . DIRECTORY_SEPARATOR . $source;
+        $sourceH = @fopen($sourceUri, 'rb');
+
+        if ($sourceH === false) {
+            $this->addError(sprintf('Unable to open URI: %s', $sourceUri));
+            return;
+        }
 
         if (is_null($destination)) {
             $destination = $source;
         }
         $destUri = $this->getUri() . '/' . $destination;
+        $destH = @fopen($destUri, 'wb');
+        if ($destH === false) {
+            $this->addError(sprintf('Unable to open URI: %s', $destUri));
+            fclose($sourceH);
+            return;
+        }
 
-        $this->_copyFile($sourceUri, $destUri);
-
+        stream_copy_to_stream($sourceH, $destH);
+        fclose($sourceH);
+        fclose($destH);
     }
 
     /**
@@ -297,13 +296,27 @@ class Dfp_Datafeed_Transfer_Adapter_Stream extends Dfp_Datafeed_Transfer_Adapter
     public function retrieveFile($source, $destination=null)
     {
         $sourceUri = $this->getUri() . '/' . $source;
+        $sourceH = @fopen($sourceUri, 'rb');
+
+        if ($sourceH === false) {
+            $this->addError(sprintf('Unable to open URI: %s', $sourceUri));
+            return;
+        }
 
         if (is_null($destination)) {
             $destination = $source;
         }
         $destUri = $this->getBasePath() . DIRECTORY_SEPARATOR . $destination;
+        $destH = @fopen($destUri, 'wb');
+        if ($destH === false) {
+            $this->addError(sprintf('Unable to open URI: %s', $destUri));
+            fclose($sourceH);
+            return;
+        }
 
-        $this->_copyFile($sourceUri, $destUri);
+        stream_copy_to_stream($sourceH, $destH);
+        fclose($sourceH);
+        fclose($destH);
     }
 
     /**

@@ -139,6 +139,18 @@ class Dfp_Datafeed_File_Reader_Format_Csv_File
     }
 
     /**
+     * Closes the file
+     *
+     * @return $this
+     */
+    public function close()
+    {
+        fclose($this->_filePointer);
+        $this->_filePointer = null;
+        return $this;
+    }
+
+    /**
      * Returns true if the files has been opened already.
      * @return boolean
      */

@@ -68,6 +68,7 @@ class Dfp_Datafeed_File_Reader_Format_CsvTest extends PHPUnit_Framework_TestCase
                          array('a', 'b', 'c'),
                          false,
                          array(null),
+                         array('a','b','c','d'),
                          false
                      )
                  );
@@ -94,7 +95,7 @@ class Dfp_Datafeed_File_Reader_Format_CsvTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(2, $i);
 
         $this->assertTrue($sut->hasErrors());
-        $this->assertEquals(array('Error on line: 3','Empty row on line: 4'), $sut->getErrors());
+        $this->assertEquals(array('Error on line: 3','Empty row on line: 4', 'Header row and record mismatch on line: 5'), $sut->getErrors());
 
     }
 
