@@ -58,7 +58,7 @@ class Dfp_Datafeed_File_Reader_Format_CsvTest extends PHPUnit_Framework_TestCase
         $mockDialect = $this->getMock('Dfp_Datafeed_File_Format_Csv_Dialect_Interface');
 
         $mockFile->expects($this->once())->method('open')->with($this->equalTo('feedfile.csv'));
-        $mockFile->expects($this->once())->method('setDialect')->with($this->equalTo($mockDialect));
+        $mockFile->expects($this->exactly(2))->method('setDialect')->with($this->equalTo($mockDialect));
 
         $mockFile->expects($this->once())->method('detectHeader')->will($this->returnValue(array(0,1,2)));
         $mockFile->expects($this->atLeastOnce())->method('getRecord')
