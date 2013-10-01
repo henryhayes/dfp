@@ -10,21 +10,19 @@
         "fixed width"
     ],
     "homepage": "https://github.com/henryhayes/dfp",
-    "license": "BSD",
+    "license": "BSD-2-Clause-FreeBSD",
     "require": {
-        "php": ">=5.3.3"
+        "php": ">=5.3.3",
+        "ext-pdo": "*"
     },
     "autoload": {
         "psr-0": {
             "Dfp_": "library/"
         }
     },
-    "include-path": [
-        "library/"
-    ],
     "extra": {
         "branch-alias": {
-            "master": "2.0.0"
+            "master": "2.0.0-dev"
         }
     }
 }
